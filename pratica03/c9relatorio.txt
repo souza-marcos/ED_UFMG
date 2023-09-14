@@ -1,0 +1,58 @@
+1. Talvez Vazamento de memória e atribuição de valor em 
+    posicao indevida.
+
+2. Utilizando o valgrind, Confirmei minha hipótese.
+
+==120686== Memcheck, a memory error detector
+==120686== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==120686== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==120686== Command: ./main
+==120686== 
+==120686== Invalid write of size 4
+==120686==    at 0x10916B: f (c9.c:6)
+==120686==    by 0x109180: main (c9.c:11)
+==120686==  Address 0x4a9c068 is 0 bytes after a block of size 40 alloc'd
+==120686==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==120686==    by 0x10915E: f (c9.c:5)
+==120686==    by 0x109180: main (c9.c:11)
+==120686== 
+==120686== 
+==120686== HEAP SUMMARY:
+==120686==     in use at exit: 40 bytes in 1 blocks
+==120686==   total heap usage: 1 allocs, 0 frees, 40 bytes allocated
+==120686== 
+==120686== 40 bytes in 1 blocks are definitely lost in loss record 1 of 1
+==120686==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==120686==    by 0x10915E: f (c9.c:5)
+==120686==    by 0x109180: main (c9.c:11)
+==120686== 
+==120686== LEAK SUMMARY:
+==120686==    definitely lost: 40 bytes in 1 blocks
+==120686==    indirectly lost: 0 bytes in 0 blocks
+==120686==      possibly lost: 0 bytes in 0 blocks
+==120686==    still reachable: 0 bytes in 0 blocks
+==120686==         suppressed: 0 bytes in 0 blocks
+==120686== 
+==120686== For lists of detected and suppressed errors, rerun with: -s
+==120686== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
+
+
+3. Liberei a memória da variavel x no final da função.
+    Comentei a linha que fazia a atribuição.
+
+4. Verificado que não possui mais erros. 
+
+==120866== Memcheck, a memory error detector
+==120866== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==120866== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==120866== Command: ./main
+==120866== 
+==120866== 
+==120866== HEAP SUMMARY:
+==120866==     in use at exit: 0 bytes in 0 blocks
+==120866==   total heap usage: 1 allocs, 1 frees, 40 bytes allocated
+==120866== 
+==120866== All heap blocks were freed -- no leaks are possible
+==120866== 
+==120866== For lists of detected and suppressed errors, rerun with: -s
+==120866== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

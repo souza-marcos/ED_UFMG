@@ -1,0 +1,44 @@
+==121416== Memcheck, a memory error detector
+==121416== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==121416== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==121416== Command: ./main
+==121416== 
+78233664
+78238016
+78238208
+78238400
+78238592
+78238784
+8487==121416== 
+==121416== Process terminating with default action of signal 2 (SIGINT)
+==121416==    at 0x4985A35: write (write.c:26)
+==121416==    by 0x48FBF6C: _IO_file_write@@GLIBC_2.2.5 (fileops.c:1180)
+==121416==    by 0x48FDA60: new_do_write (fileops.c:448)
+==121416==    by 0x48FDA60: _IO_new_do_write (fileops.c:425)
+==121416==    by 0x48FDA60: _IO_do_write@@GLIBC_2.2.5 (fileops.c:422)
+==121416==    by 0x48FC754: _IO_new_file_xsputn (fileops.c:1243)
+==121416==    by 0x48FC754: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==121416==    by 0x48E6D28: outstring_func (vfprintf-internal.c:239)
+==121416==    by 0x48E6D28: __vfprintf_internal (vfprintf-internal.c:1516)
+==121416==    by 0x48D181E: printf (printf.c:33)
+==121416==    by 0x10919D: main (c10.c:10)
+==121416== 
+==121416== HEAP SUMMARY:
+==121416==     in use at exit: 4,489,728 bytes in 35,045 blocks
+==121416==   total heap usage: 35,045 allocs, 0 frees, 4,489,728 bytes allocated
+==121416== 
+==121416== 4,485,504 bytes in 35,043 blocks are definitely lost in loss record 3 of 3
+==121416==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==121416==    by 0x10917E: main (c10.c:9)
+==121416== 
+==121416== LEAK SUMMARY:
+==121416==    definitely lost: 4,485,504 bytes in 35,043 blocks
+==121416==    indirectly lost: 0 bytes in 0 blocks
+==121416==      possibly lost: 0 bytes in 0 blocks
+==121416==    still reachable: 4,224 bytes in 2 blocks
+==121416==         suppressed: 0 bytes in 0 blocks
+==121416== Reachable blocks (those to which a pointer was found) are not shown.
+==121416== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==121416== 
+==121416== For lists of detected and suppressed errors, rerun with: -s
+==121416== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)

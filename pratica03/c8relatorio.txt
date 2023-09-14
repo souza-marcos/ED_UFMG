@@ -1,0 +1,45 @@
+1. Leitura em posição inválida do array source.
+
+2. Utilizando o valgrind, Confirmei minha hipótese.
+
+==120278== Memcheck, a memory error detector
+==120278== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==120278== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==120278== Command: ./main
+==120278== 
+==120278== Invalid read of size 1
+==120278==    at 0x1091D2: main (c8correto.c:9)
+==120278==  Address 0x4a9c0ba is 0 bytes after a block of size 26 alloc'd
+==120278==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==120278==    by 0x1091B1: main (c8correto.c:6)
+==120278== 
+==120278== 
+==120278== HEAP SUMMARY:
+==120278==     in use at exit: 0 bytes in 0 blocks
+==120278==   total heap usage: 2 allocs, 2 frees, 53 bytes allocated
+==120278== 
+==120278== All heap blocks were freed -- no leaks are possible
+==120278== 
+==120278== For lists of detected and suppressed errors, rerun with: -s
+==120278== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+
+
+3. Modifiquei o tamanho do array source para 27 para comportar
+    o caractere de terminação.
+
+4. Verificado que não possui mais erros. 
+
+==120382== Memcheck, a memory error detector
+==120382== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==120382== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==120382== Command: ./main
+==120382== 
+==120382== 
+==120382== HEAP SUMMARY:
+==120382==     in use at exit: 0 bytes in 0 blocks
+==120382==   total heap usage: 2 allocs, 2 frees, 54 bytes allocated
+==120382== 
+==120382== All heap blocks were freed -- no leaks are possible
+==120382== 
+==120382== For lists of detected and suppressed errors, rerun with: -s
+==120382== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

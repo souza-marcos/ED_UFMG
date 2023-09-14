@@ -1,0 +1,85 @@
+mkdir -p ./tmp/gprof
+bin/main 1 10
+-----------
+55
+Clock Time: 0 sec, 2374 nsec
+CPU time User: 0 sec, 1500 nsec.
+CPU time System: 0 sec, 0 nsec.
+-----------gprof bin/main gmon.out > ./tmp/gprof/fib_recur_10.txt
+bin/main 1 20
+-----------
+6765
+Clock Time: 0 sec, 96379 nsec
+CPU time User: 0 sec, 10900 nsec.
+CPU time System: 0 sec, 0 nsec.
+-----------gprof bin/main gmon.out > ./tmp/gprof/fib_recur_20.txt
+bin/main 1 40
+-----------
+102334155
+Clock Time: 2 sec, 413142603 nsec
+CPU time User: 1 sec, 41308600 nsec.
+CPU time System: 0 sec, 0 nsec.
+-----------gprof bin/main gmon.out > ./tmp/gprof/fib_recur_40.txt
+bin/main 2 10000
+-----------
+1242044891
+Clock Time: 0 sec, 126550 nsec
+CPU time User: 0 sec, 14800 nsec.
+CPU time System: 0 sec, 0 nsec.
+-----------gprof bin/main gmon.out > ./tmp/gprof/fib_itera_10000.txt
+bin/main 2 100000
+-----------
+873876091
+Clock Time: 0 sec, 443481 nsec
+CPU time User: 0 sec, 46100 nsec.
+CPU time System: 0 sec, 0 nsec.
+-----------gprof bin/main gmon.out > ./tmp/gprof/fib_itera_100000.txt
+bin/main 2 1000000
+-----------
+1884755131
+Clock Time: 0 sec, 3751711 nsec
+CPU time User: 0 sec, 269100 nsec.
+CPU time System: 0 sec, 107600 nsec.
+-----------gprof bin/main gmon.out > ./tmp/gprof/fib_itera_1000000.txt
+bin/main 3 1000
+-----------
+0
+Clock Time: 0 sec, 50913 nsec
+CPU time User: 0 sec, 7000 nsec.
+CPU time System: 0 sec, 0 nsec.
+-----------gprof bin/main gmon.out > ./tmp/gprof/fat_recur_1000.txt
+bin/main 3 10000
+-----------
+0
+Clock Time: 0 sec, 234871 nsec
+CPU time User: 0 sec, 24800 nsec.
+CPU time System: 0 sec, 0 nsec.
+-----------gprof bin/main gmon.out > ./tmp/gprof/fat_recur_10000.txt
+bin/main 3 100000
+-----------
+0
+Clock Time: 0 sec, 2846870 nsec
+CPU time User: 0 sec, 0 nsec.
+CPU time System: 0 sec, 285900 nsec.
+-----------gprof bin/main gmon.out > ./tmp/gprof/fat_recur_100000.txt
+bin/main 4 10000
+-----------
+0
+Clock Time: 0 sec, 21930 nsec
+CPU time User: 0 sec, 3600 nsec.
+CPU time System: 0 sec, 0 nsec.
+-----------gprof bin/main gmon.out > ./tmp/gprof/fat_itera_10000.txt
+bin/main 4 100000
+-----------
+0
+Clock Time: 0 sec, 196808 nsec
+CPU time User: 0 sec, 21000 nsec.
+CPU time System: 0 sec, 0 nsec.
+-----------gprof bin/main gmon.out > ./tmp/gprof/fat_itera_100000.txt
+bin/main 4 1000000
+-----------
+0
+Clock Time: 0 sec, 1937000 nsec
+CPU time User: 0 sec, 195100 nsec.
+CPU time System: 0 sec, 0 nsec.
+-----------gprof bin/main gmon.out > ./tmp/gprof/fat_itera_1000000.txt

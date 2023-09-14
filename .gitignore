@@ -1,0 +1,12 @@
+# Ignore directories
+/vpl1
+/last_year
+/.vscode
+
+# Ignore files
+*.aux
+*.log
+*.pdf
+*.gz
+*.tex
+*.zip
