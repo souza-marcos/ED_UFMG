@@ -1,0 +1,95 @@
+------------- RELATÓRIO DE ROTEIRO -------------
+
+1. Estruturas de dados críticos: mat_tipo localizada no arquivo mat.h
+apresenta potencial estrutura de consumo de memória e localidade de
+referência. 
+Segmentos de código críticos: Funções de manipulação de matrizes pre-
+sentes no arquivo mat.h, em especial a função multiplicaMatrizes cuja
+implementação se encontra no arquivo mat.c justamente por apresentar 
+complexidade(O(n^3) - ordem de complexidade cúbica) mais alta do que
+as demais.
+
+
+2. Podemos ter tanto localidade de referência por tempo, isto é, conjunto
+de dados acessados têm maior probabilidade de serem acessados novamente, 
+quanto localidade de referência por espaço, isto é, conjunto de dados proximos
+fisicamente tem maior probabilidade de serem acessados. No caso do exemplo
+escolhido temos que o acesso dos elementos da matriz são realizados diversas vezes
+na multiplicação o que nos indica uma provável função que pode explorar essas
+funcionalidades para uma execução mais rápida (evitar misses de memória cache).
+
+Importante ressaltar que para os misses serem observados com maior frequência 
+o conjunto de dados deve ser maior do que a cache em questão disponível, isto é,
+ser grande suficientemente para que conjunto de dados não possa ser copiado
+inteiramente para a cache. Essa é a explicação do uso de uma matriz de dimensão
+450 x 450.
+
+Desse modo, a ferramenta utilizada foi o cachegrind e callgrind, ambos do valgrind:
+valgrind --tool=cachegrind --cache-sim=yes --branch-sim=yes ./matop -m -x 450 -y 450
+
+
+3. O programa será executado a partir dos seguintes parâmetros: 
+ ./bin/matop -m -x 450 -y 450. Ou seja, como foi escolhido a opção "-m"
+estamos realizando a operação de multiplicação de matrizes, para isso
+o programa cria três matrizes, inicializa duas com valores aleatórios,
+a terceira como matriz nula e enfim realiza a multiplicação. Além disso,
+é importante salientar que será trabalhada com matrizes de dimensão
+450 x 450.
+
+4. 
+    1. Output presente no arquivo cachegrind.out.294116
+    2. Output presente no arquivo cg_annotate_out_294116.txt
+
+5. 
+    1. Output presente no arquivo callgrind.out.295175
+    2. Output presente no arquivo callgrind_annotate_out_295175.txt
+
+6. 
+    1. Em termos gerais, o programa apresentou os seguintes resultados: 
+
+--------------------------------------------------------------------------------
+Ir (Instruction Fetch)   I1mr (L1 Ir misses)    ILmr (LL Ir misses)   Dr (Data read)            D1mr (L1 Dr misses)   DLmr(LL Dr misses)   Dw (Data write)         D1mw (L1 Dw misses)      DLmw (LL Dw misses)           Bc(conditional branch)    Bcm (Bc misses)    Bi(indirect branch)       Bim (mispredicted Bi)           
+--------------------------------------------------------------------------------
+4,256,764,597 (100.0%)   1,578 (100.0%)         1,548 (100.0%)        1,902,411,968 (100.0%)    30,578,834 (100.0%)   2,952 (100.0%)       188,608,828 (100.0%)    176,993 (100.0%)         92,826(100.0%)                190,376,522(100.0%)       3,168,267(100.0%)  4,674,238 (100.0%)       1,083 (100.0%)           PROGRAM TOTALS
+
+    O que revela que o programa apresenta número considerável de misses de
+leitura. Após analisar as principais funções do programa, a principal função
+que consome recursos, como evidenciada acima, foi a multiplicação de matrizes.
+
+--------------------------------------------------------------------------------
+Ir                     I1mr        ILmr        Dr                     D1mr                DLmr           Dw                  D1mw             DLmw            Bc                  Bcm                Bi                 Bim           file:function
+--------------------------------------------------------------------------------
+3,556,107,485 (83.54%)  7 ( 0.44%)  7 ( 0.45%) 1,732,795,667 (91.08%) 30,549,889 (99.91%)     2 ( 0.07%) 91,327,957 (48.42%)       2 ( 0.00%)      0          91,530,902 (48.08%)   202,979 ( 6.41%)         0            0           /home/neg/Documents/dev/ed_ufmg/pratica04/src/mat.c:multiplicaMatrizes
+
+
+    2. Possivelmente se trata deve ser caracterizada a estrutura de 
+matriz utilizando a representação de vetor contínuo. Saber como essa estrutura
+funciona permite entender a localidade de espaço envolvida nela e como otimizar
+operaçõe. Por exemplo, iterar uma matriz pelo elementos de uma linha é consideravelmente
+melhor do que pela coluna, afinal quando iteramos pelas linhas, o elemento seguinte
+do "laço" está fisicamente do "lado" do anterior, já pelas colunas o elemento seguinte
+está a N * (tipo dos elementos da matriz) bytes de distância.
+
+    3. Como expresso anteriormente, um possível segmento de código a ser instrumentado
+são os laços de repetição sobre os elementos da matriz. Em um caso especial, sobre a 
+função de multiplicação de matrizes pois é de conhecimento comum que trocar a ordem dos
+loops pode trazer uma otimização no tempo de execução justamente por causa da localidade 
+de referência de espaço. Exemplo:
+    ----
+for (i=0; i<c->tamx;i++){
+    for (j=0; j<c->tamy;j++){
+        for (k=0; k<a->tamy;k++){
+            c->m[i][j] += a->m[i][k]*b->m[k][j]; // O elemento de c é sempre o mesmo no loop mais interno ao
+        }                                        // passo que os elementos de a são iterados pelas linhas(BOM)
+    }                                            // e de b pelas colunas(RUIM)
+}
+    --- trocar por 
+    ----
+for (i=0; i<c->tamx;i++){
+    for (k=0; k<a->tamy;k++){
+        for (j=0; j<c->tamy;j++){
+            c->m[i][j] += a->m[i][k]*b->m[k][j]; // O elemento de c é iterado pelas colunas(RUIM) ao
+        }                                        // passo que os elementos de a são os mesmos no loop mais interno
+    }                                            // e de b pelas colunas(RUIM)
+}
+    ---
