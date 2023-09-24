@@ -235,12 +235,12 @@ int main(int argc, char ** argv)
       case 'F':
                 erroAssert(numcampos == 4, "Numero de campos errado");
                 // nao usamos essa informacao no momento
+                minfase = 0;
                 break;
     }
   }
   retclose = fclose(log);
   erroAssert(retclose==0,"Erro no fclose");
-
   // verifica se minfase e minid sao 0
   erroAssert(minid == 0, "Id minimo nao e zero");
   erroAssert(minfase == 0, "Fase minima nao e zero");

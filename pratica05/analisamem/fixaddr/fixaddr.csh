@@ -9,6 +9,6 @@
 #		: $2 is the output directory
 #---------------------------------------------------------------------
 
-awk -f fixaddr/getaddr.awk $1 | sort -nu > $2/$1.addr
-awk -f fixaddr/genfaixas.awk $2/$1.addr $1 > $2/$1.fixed
+gawk -f fixaddr/getaddr.awk $1 | sort -nu > $2/$1.addr
+gawk -f fixaddr/genfaixas.awk $2/$1.addr $1 > $2/$1.fixed
 

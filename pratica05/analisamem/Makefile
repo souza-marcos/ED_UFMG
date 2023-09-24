@@ -30,14 +30,22 @@ use: $(EXE)
 	if test -d /tmp/out; then rm -rf /tmp/out; fi
 	mkdir /tmp/out
 	mkdir /tmp/out/teste
-	fixaddr/fixaddr.csh teste/multlog.out /tmp/out
-	$(EXE) -i /tmp/out/teste/multlog.out.fixed -p /tmp/out/mult
-	fixaddr/fixaddr.csh teste/somalog.out /tmp/out
-	$(EXE) -i /tmp/out/teste/somalog.out.fixed -p /tmp/out/soma
-	fixaddr/fixaddr.csh teste/transplog.out /tmp/out
-	$(EXE) -i /tmp/out/teste/transplog.out.fixed -p /tmp/out/transp
+	fixaddr/fixaddr.csh teste/determinante20.out /tmp/out
+	$(EXE) -i /tmp/out/teste/determinante20.out.fixed -p /tmp/out/det20
+# fixaddr/fixaddr.csh teste/determinante100.out /tmp/out
+# $(EXE) -i /tmp/out/teste/determinante100.out.fixed -p /tmp/out/det100
+# fixaddr/fixaddr.csh teste/determinante10.out /tmp/out
+# $(EXE) -i /tmp/out/teste/determinante10.out.fixed -p /tmp/out/det10
+# fixaddr/fixaddr.csh teste/multlog.out /tmp/out
+# $(EXE) -i /tmp/out/teste/multlog.out.fixed -p /tmp/out/mult
+# fixaddr/fixaddr.csh teste/somalog.out /tmp/out
+# $(EXE) -i /tmp/out/teste/somalog.out.fixed -p /tmp/out/soma
+# fixaddr/fixaddr.csh teste/transplog.out /tmp/out
+# $(EXE) -i /tmp/out/teste/transplog.out.fixed -p /tmp/out/transp
 	gnuplot /tmp/out/*.gp
 	ls /tmp/out/
+
+	
 
 test: $(TEST)
 	$(BIN)/testepilhaindexada
