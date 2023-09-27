@@ -1,4 +1,5 @@
 ------------- RELATÓRIO DE ROTEIRO -------------
+Marcos Daniel Souza Netto           2022069492
 
 1. Estruturas de dados críticos: mat_tipo localizada no arquivo mat.h
 apresenta potencial estrutura de consumo de memória e localidade de
