@@ -12,7 +12,7 @@ int main(){
 
     char expression[100] = "(1 & ~ 2 | 1 & 0) \0";
 
-    Node* root = to_ast(expression); 
+    Node* root = to_ast_new(expression); 
 
     print_tree_preorder(root);
     printf("\n");

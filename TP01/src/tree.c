@@ -4,9 +4,9 @@
 #include <assert.h>
 #include <stdio.h>
 
-#define AND_OP -1
-#define OR_OP -2
-#define NEG_OP -3
+#define AND_OP 111
+#define OR_OP 112
+#define NEG_OP 113
 
 Node* init_node(){
     Node* n = malloc(sizeof(Node));
@@ -113,64 +113,180 @@ void print_tree_posorder(Node* node){
         }
     }
 }
+typedef struct _tokens{
+    Node* arr[100];
+    int size;
+} Tokens;
 
+Tokens tokenize(char* exp){
+    Tokens t;
+    int i = 0;
+    while(exp[i] != '\0'){
+        if(exp[i] == ' ') continue;
 
-Node* to_ast_new(char* exp){
-    Node* root = init_node();
-    // Iterate the subsequence getting the most priority elements
-    // 1.Par 2.Not 3.And 4.Or
+        Node* cur = init_node();
+        cur->value = exp[i ++];
 
+        t.arr[t.size ++] = cur;
+    }
 
-    //Tokenize elements
-
-
-
+    return t;
 }
 
-Node* to_ast(char* exp){ // FIX HERE
+int priority(char el){
+    if(el == '|') return 1;
+    if(el == '&') return 2;
+    if(el == '~') return 3;
+    return 0;
+}
 
-    Node* root = init_node();
-    // Node* parent = NULL;
+/**
+ * @brief Reduce method for resolve the top of stack operation 
+ * 
+ * @param stack 
+ * @param root 
+ * @param arr 
+ * @param idx 
+ */
+void reduce(Stack* stack, Node* root, Node* *arr, int idx){
+    root = top(stack); pop(stack);
+    if(root->value != '~'){
+        insert_right(root, arr[idx]);
+        insert_left(root, top(stack)); pop(stack);
+    }
+    else{
+        insert_left(root, arr[idx]); // NOT nodes has only left node
+    }
+    push(stack, root);
+}
+/**
+ * @brief Tokenize and Parsing for a tree
+ * 
+ * @param exp Expression
+ * @return Node* root of the tree
+ */
+Node* to_ast_new(char* exp){
+    Tokens t = tokenize(exp);
 
+    Node **arr = &t.arr; 
+
+    Node* root = NULL;
     Stack* stack = init_stack();
-    push(stack, root);
+    for(int i = 0; i < t.size;){
 
+        if(empty(stack)){ // Shift
+            root = arr[i ++];
+            push(stack, arr[i ++]);
+            continue;
+        } 
 
-    int i = 0;
-    Node *left = init_node();
-    insert_left(root, left);
-    push(stack, root);
-    Node* cur = left;
-    
-    while(exp[i] != '\0'){
-
-        if(exp[i] == ' '){i ++; continue;}
-
-        if(exp[i] == '&' || exp[i] == '|' ){ //AND OR NOT
-            cur->value = (exp[i] == '&'?AND_OP:OR_OP);
-            Node* right = init_node();
-            insert_right(cur, right);
-            push(stack, cur);
-            cur = right;
-        }
-        else if(exp[i] == '(' || exp[i] == '~'){
-            if(exp[i] == '~') cur->value = NEG_OP;
-            Node *left = init_node();
-            insert_left(cur, left);
-            push(stack, cur);
-            cur = left;
-        }
-        else if(exp[i] == ')'){ //RPAR
-            cur = top(stack); pop(stack); // Getting the parent
-        }
-        else{
-            cur->value = exp[i];
-            if(top(stack)->value == NEG_OP) pop(stack); // The not operator is unary
-            cur = top(stack); pop(stack); // Getting the parent
+        if(arr[i]->value == '&' || arr[i]->value == '|' || arr[i]->value == '~'){ // Shift
+            push(stack, arr[i ++]);
+            continue;
         }
 
-        i++;
+        Node* next = NULL;
+        if (i + 1 < t.size) next = arr[i + 1]; // Fix here
+        else{ // Reduce //  
+            reduce(stack, root, arr, i ++);
+            continue;
+        }
+        // top(stack) <==> previous operator
+        if(priority(top(stack)->value) >= priority(next->value)){ // Reduce
+            reduce(stack, root, arr, i ++);
+            push(stack, root);
+        }else{ // Shift
+            push(stack, arr[i++]);
+        }
+    }
+
+
+    // Here must reduce until it's impossible reduce more, i.e. priority.prev < priority.next
+    assert(stack->size <= 1); // Remove this
+    while(stack->size > 1){
+        // TODO
     }
 
     return root;
 }
+
+int prioridade(char elemento)
+{
+    int prioridade;
+    switch(elemento)
+    {
+        case '+':
+        case '-':
+            prioridade = 1;
+            break;
+            
+        case '*':
+        case '/':
+            prioridade = 2;
+            break;
+            
+        case '^':
+            prioridade = 3;
+            break;
+            
+        default:
+                prioridade = 0;
+                break;
+    }
+    
+    return prioridade;
+}
+
+
+Node* to_ast_copy(char* exp){
+    Node* root = init_node();
+    
+
+    char posfixa[200] = "";
+	Stack *stack = init_stack();
+    int cont = 0;
+    char c;
+    
+    int i = 0 ;
+    while(exp[cont] != '\0')
+    {
+        c = exp[cont];
+        switch(c)
+        {
+            case '~':
+            case '|':
+            case '&':
+                while((!empty(stack)) && prioridade(c) <= prioridade(top(stack)->value))
+                    posfixa[i++] = top(stack)->value;
+                
+                push(stack, c);
+                break; 
+                
+            case '(':
+                push(stack, c);
+                break;
+                
+            case ')':
+                while(top(stack)->value != '('){
+                    posfixa[i++] = top(stack)->value; pop(stack);
+                }
+                if(top(stack)->value == '(') pop(stack);
+                break;
+                
+            default:
+                posfixa[i++] = exp[cont];
+                break;
+        }
+        cont++;
+    }
+    while(stack->size > 0){
+        if(top(stack)->value != '('){
+            posfixa[i++] = top(stack);
+        }
+        pop(stack);
+    }
+    
+    for(int j = 0; j < i; j++){
+        printf("%c ", posfixa[j]);
+    }
+};
