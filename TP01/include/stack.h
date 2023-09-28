@@ -1,23 +1,32 @@
 #ifndef STACK_H
 #define STACK_H
 
-#include "node.h"
+#include <stdbool.h>
 
-#define MAX_STACK 100
+#include "types.h"
 
+// Define the stack structure
 typedef struct Stack{
-    int size;
-    Node *arr[MAX_STACK];
+    struct Element *elements;
+    int capacity;
+    int top;
 } Stack;
 
-Stack* init_stack();
-Node* top(Stack* s);
-void pop(Stack* s);
-int push(Stack* s, Node* n);
+// Function to initialize the stack
+void initStack(struct Stack *stack, int capacity);
 
-int empty(Stack* s);
-void clear(Stack* s);
+// Function to push an element onto the stack
+bool push(struct Stack *stack, enum DataType type, union GenericData data);
 
-void print_stack(Stack* stack);
+// Function to pop an element from the stack
+bool pop(struct Stack *stack, enum DataType *type, union GenericData *data);
+
+// Function to check if the stack is empty
+bool isEmpty(struct Stack *stack);
+
+// Function to get the top element of the stack
+bool top(struct Stack *stack, enum DataType *type, union GenericData *data);
+
+
 
 #endif

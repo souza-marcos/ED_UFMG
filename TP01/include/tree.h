@@ -1,19 +1,30 @@
 #ifndef TREE_H
 #define TREE_H
 
-#include "node.h"
+#include <stdbool.h>
+#include "treenode.h"
 
-Node* init_node();
-void insert_right(Node* parent, Node* child);
-void insert_left(Node* parent, Node* child);
+// Function to initialize a binary tree node
+struct TreeNode* initTreeNode();
 
-void print_tree_node(Node* node);
+// Functions to insert child nodes
+void insertRight(struct TreeNode* parent, struct TreeNode* child);
+void insertLeft(struct TreeNode* parent, struct TreeNode* child);
 
-void print_tree_preorder(Node* node);
-void print_tree_inorder(Node* node);
-void print_tree_posorder(Node* node);
+// Functions to print tree nodes
+void printTreeNode(struct TreeNode* node);
 
-Node* to_ast(char* exp);
-Node* to_ast_new(char* exp);
+void printTreePreorder(struct TreeNode* node);
+void printTreeInorder(struct TreeNode* node);
+void printTreePosorder(struct TreeNode* node);
+
+// Functions for expression parsing and evaluation
+void toASTCopy(char* exp);
+struct TreeNode* toASTNew(char* exp);
+
+char* infixToPostfix(const char* infix);
+int evaluateExpression(struct TreeNode* root);
+bool evaluate_expression(char* exp, int arr[100]);
+
 
 #endif

@@ -4,21 +4,20 @@
 
 #include "tree.h"
 
-int solve(int *arr, int size){
-    return -1;
-}
-
 int main(){
 
-    char expression[100] = "(1 & ~ 2 | 1 & 0) \0";
+    char expression[100] = "~1 | ~2 & (~2 | 1) \0";
+    char* postfix = infixToPostfix(expression);
+    printf("POSTFIX EXPRESSION -> %s\n", postfix);
+    //int arr[100] = {0, 1, 1};
+    // printf("VAL -> %d\n", evaluateExpression(postfix, arr));
+    // to_ast_copy(expression); 
 
-    Node* root = to_ast_new(expression); 
-
-    print_tree_preorder(root);
-    printf("\n");
-    print_tree_inorder(root);
-    printf("\n");
-    print_tree_posorder(root);
+    // print_tree_preorder(root);
+    // printf("\n");
+    // print_tree_inorder(root);
+    // printf("\n");
+    // print_tree_posorder(root);
     // int s[100], s_size = 0;
     // printf("%s", expression);
 

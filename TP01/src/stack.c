@@ -1,38 +1,51 @@
-#include "stack.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
 
-#define MAX_STACK 100
+#include "types.h"
+#include "stack.h"
 
-Stack* init_stack(){
-    Stack* s = malloc(sizeof(Stack));
-    s->size = 0;
-    return s;
+void initStack(struct Stack *stack, int capacity) {
+    stack->elements = malloc(sizeof(struct Element) * capacity);
+    stack->capacity = capacity;
+    stack->top = -1;
 }
 
-Node* top(Stack* s){
-    return s->arr[s->size -1];
-}
-
-void pop(Stack* s){
-    s->arr[-- s->size] = 0; // Assign NULL don't work
-}
-
-int push(Stack* s, Node* n){
-    if(s->size >= MAX_STACK) return 0;
-    s->arr[s->size ++] = n;
-    return 1;
-}
-
-int empty(Stack* s){
-    return (s->size == 0);
-}
-
-void clear(Stack* s){
-    s->size = 0;
-}
-
-void print_stack(Stack* stack){
-    for(int i = 0; i < stack->size; i++){
-        printf("%c\n", stack->arr[i]->value);
+bool push(struct Stack *stack, enum DataType type, union GenericData data) {
+    if (stack->top >= stack->capacity - 1) {
+        return false; // Stack is full
     }
+
+    stack->top++;
+    stack->elements[stack->top].type = type;
+    stack->elements[stack->top].data = data;
+
+    return true;
+}
+
+bool pop(struct Stack *stack, enum DataType *type, union GenericData *data) {
+    if (stack->top < 0) {
+        return false; // Stack is empty
+    }
+
+    *type = stack->elements[stack->top].type;
+    *data = stack->elements[stack->top].data;
+    stack->top--;
+
+    return true;
+}
+
+bool isEmpty(struct Stack *stack) {
+    return stack->top < 0;
+}
+
+bool top(struct Stack *stack, enum DataType *type, union GenericData *data) {
+    if (stack->top < 0) {
+        return false; // Stack is empty
+    }
+
+    *type = stack->elements[stack->top].type;
+    *data = stack->elements[stack->top].data;
+
+    return true;
 }
