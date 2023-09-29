@@ -4,6 +4,9 @@
 #include "utils.hpp"
 
 #define endl '\n'
+
+using std::cout, std::string;
+
 int main(){
 
     char expression[100] = "0 | 2 | 2 & 1 \0";
@@ -11,23 +14,15 @@ int main(){
     std::cout << "POSTFIX EXPRESSION -> " << postfix << endl;
 
     TreeNode<char>* root = postfixToAST(postfix);
-    BinaryTree<char>::printTreePreorder(root);
+    BinaryTree<char>::printTreeInorder(root);
     
-
-    // int arr[100] = {0, 1, 1};
-    // std::cout << "VAL -> "<< evaluateExpression(postfix.c_str(), arr) << endl;
-    // to_ast_copy(expression); 
-
-    // print_tree_preorder(root);
-    // printf("\n");
-    // print_tree_inorder(root);
-    // printf("\n");
-    // print_tree_posorder(root);
-    // int s[100], s_size = 0;
-    // printf("%s", expression);
-
-    // while(scanf("%c", &temp)) s[s_size++] = (int) temp;
+    int arr[100] = {1, 0, 0};
+    
+    std::cout << "\nVAL -> "<< evaluateExpression(postfix, arr) << endl;
+    std::cout << "\nVAL2-> "<< evaluateExpression(root, arr) << endl;
 
 
+
+    
     return 0;
 }

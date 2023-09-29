@@ -1,0 +1,30 @@
+CC = g++
+LIBS = -lm
+SRC = src
+OBJ = obj
+INC = include
+BIN = bin
+# Oldest $(OBJ)/stack.o $(OBJ)/binary_tree.o 
+OBJS = $(OBJ)/utils.o $(OBJ)/main.o 
+HDRS =  $(INC)/stack.hpp $(INC)/binary_tree.hpp $(INC)/utils.hpp
+CFLAGS = -g -std=c++17 -Wall -c -I$(INC)
+
+EXE = $(BIN)/main
+
+run: $(EXE)
+	$(EXE) 
+
+$(BIN)/main: $(OBJS)
+	$(CC) -g -std=c++11 -o $(BIN)/main $(OBJS) $(LIBS)
+
+$(OBJ)/main.o: $(HDRS) main.cpp
+	$(CC) $(CFLAGS) -o $(OBJ)/main.o main.cpp
+
+# $(OBJ)/stack.o: $(HDRS) $(SRC)/stack.cpp
+# 	$(CC) $(CFLAGS) -o $(OBJ)/stack.o $(SRC)/stack.cpp
+
+# $(OBJ)/binary_tree.o: $(HDRS) $(SRC)/binary_tree.cpp
+# 	$(CC) $(CFLAGS) -o $(OBJ)/binary_tree.o $(SRC)/binary_tree.cpp
+
+$(OBJ)/utils.o: $(HDRS) $(SRC)/utils.cpp
+	$(CC) $(CFLAGS) -o $(OBJ)/utils.o $(SRC)/utils.cpp

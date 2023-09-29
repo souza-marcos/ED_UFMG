@@ -6,8 +6,6 @@
 
 const size_t MAX_SIZE_STACK  = 100;
 
-template class TreeNode<char>;
-
 // Function to get the precedence of an operator
 int getPrecedence(char op) {
     switch (op) {
@@ -78,7 +76,7 @@ std::string infixToPostfix(const char* infix) {
 TreeNode<char>* postfixToAST(const std::string& postfix) {
     Stack<TreeNode<char>*> stack = Stack<TreeNode<char>*>(MAX_SIZE_STACK);
     TreeNode<char>* node;
-    
+
     for (int cont = 0; postfix[cont] != '\0'; cont++) {
         char c = postfix[cont];
         node = new TreeNode<char>(c);
@@ -98,34 +96,67 @@ TreeNode<char>* postfixToAST(const std::string& postfix) {
     return stack.top();
 }
 
-// Not yet implemented 
-template <typename T>
-int evaluateExpression(TreeNode<T>* root, int arr[100]) {
-    // Implementation here
-    return 0; // Placeholder
+// Evaluate from AST
+bool evaluateExpression(TreeNode<char>* root, int arr[100]){
+    if(root == nullptr) return false;
+    if(root->left == nullptr && root->right == nullptr){
+        return arr[root->value - '0'];
+    }
+    else if(root->value == '~'){
+        return !evaluateExpression(root->left, arr);
+    }
+    else if(root->value == '|'){
+        return evaluateExpression(root->left, arr) || evaluateExpression(root->right, arr);
+    }
+    else if(root->value == '&'){
+        return evaluateExpression(root->left, arr) && evaluateExpression(root->right, arr);
+    }
+    return false;
 }
 
-// Evaluate from postfix expression // FIX HERE
+// Evaluate from postfix expression 
 bool evaluateExpression(std::string exp, int arr[100]){
 
-    int i = 0;
-    Stack<char> stack(MAX_SIZE_STACK);
-    while(exp[i] != '\0'){
+    size_t i = 0;
+
+    struct Element{
+        bool isresolved = false;
+        int el;
+        Element(bool val, int el): isresolved(val), el(el){}
+        Element(){}
+    };
+
+    Stack<Element> stack(MAX_SIZE_STACK);
+    while(i < exp.size()){
+        Element aux;
         if(exp[i] == '~'){
-            int val = arr[stack.top() - '1']; 
+            aux = stack.top(); 
+            int val = (aux.isresolved ? aux.el : arr[aux.el]); 
             stack.pop();
-            stack.push(!val);
+            stack.push(Element{true, !val});
         }
         else if(exp[i] == '|' || exp[i] == '&'){
             // Is operator
-            int val1 = arr[stack.top() - '1']; 
+            aux = stack.top();
+            int val1 = (aux.isresolved ? aux.el : arr[aux.el]); 
             stack.pop();
-            int val2 = arr[stack.top() - '1']; 
+
+            aux = stack.top();
+            int val2 = (aux.isresolved ? aux.el : arr[aux.el]); 
             stack.pop();
-            stack.push(exp[i] == '|'? (val1 || val2): (val1 && val2));
+            
+            int res = (exp[i] == '|'? (val1 || val2): (val1 && val2));
+
+            stack.push(Element{true, res});
         }
+        else {
+            stack.push(Element{false, exp[i] - '0'});
+        }
+        i++;
     }
-    int val = arr[stack.top() - '1']; 
+    Element aux = stack.top(); 
     stack.pop();
-    return val;
+    return (aux.isresolved?aux.el:arr[aux.el]);
 }
+
+
