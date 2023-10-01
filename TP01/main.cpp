@@ -9,20 +9,18 @@ using std::cout, std::string;
 
 int main(){
 
-    char expression[100] = "0 | 2 | 2 & 1 \0";
+    char expression[100] = "0 | 1 & 2\0";
     std::string postfix = infixToPostfix(expression);
     std::cout << "POSTFIX EXPRESSION -> " << postfix << endl;
 
     TreeNode<char>* root = postfixToAST(postfix);
     BinaryTree<char>::printTreeInorder(root);
-    
-    int arr[100] = {1, 0, 0};
-    
-    std::cout << "\nVAL -> "<< evaluateExpression(postfix, arr) << endl;
-    std::cout << "\nVAL2-> "<< evaluateExpression(root, arr) << endl;
 
-
+    std::string vals = "a01";
+    std::string res = "";
+    cout << "SAT: \n" << (sat_tree(root, vals, res)?"TRUE":"FALSE") << endl;
 
     
     return 0;
 }
+
