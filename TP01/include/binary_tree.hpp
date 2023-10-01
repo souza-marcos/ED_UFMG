@@ -3,98 +3,95 @@
 
 #include <iostream>
 #include <string>
-// #include <vector>
 
-// TreeNode class
+/**
+ * @brief Classe que representa um nó de uma árvore binária
+ * 
+ * @tparam T Tipo de dado a ser armazenado no nó
+ */
 template <typename T>
 class TreeNode {
 public:
-    // Constructor to initialize a tree node with a value
-    TreeNode(const T& value);
+    // Construtor para inicializar um nó de árvore com um valor
+    TreeNode(const T& value): value(value), left(nullptr), right(nullptr) {}
 
-    // Member variables
     T value;
     TreeNode<T>* left;
     TreeNode<T>* right;
 };
 
 
-// Binary tree class
+/**
+ * @brief Classe com funções para manipulação de uma árvore binária
+ * 
+ * @tparam T Tipo de dado a ser armazenado na árvore
+ */
 template <typename T>
 class BinaryTree {
 public:
-    // Constructor to initialize an empty binary tree
-    BinaryTree();
+    
+    /**
+     * @brief Insere um nó filho como filho direito de um nó pai
+     * 
+     * @param parent Nó pai
+     * @param child Nó filho
+     */
+    static void insertRight(TreeNode<T>* parent, TreeNode<T>* child) {
+        if (parent) {
+            parent->right = child;
+        }
+    }
+    /**
+     * @brief Insere um nó filho como filho esquerdo de um nó pai
+     * 
+     * @param parent Nó pai
+     * @param child Nó filho
+     */
+    static void insertLeft(TreeNode<T>* parent, TreeNode<T>* child){
+        if (parent) {
+            parent->left = child;
+        }
+    }
 
-    // Function to insert a child node as the right child of a parent node
-    static void insertRight(TreeNode<T>* parent, TreeNode<T>* child);
+    /**
+     * @brief Imprime a árvore em pré-ordem
+     * 
+     * @param node Nó raiz da árvore ou subárvore
+     */
+    static void printTreePreorder(TreeNode<T>* node){
+        if (node) {
+            std::cout << node->value << " ";
+            printTreePreorder(node->left);
+            printTreePreorder(node->right);
+        }
+    }
+    
+    /**
+     * @brief Imprime a árvore em ordem
+     * 
+     * @param node Nó raiz da árvore ou subárvore
+     */
+    static void printTreeInorder(TreeNode<T>* node){
+        if (node) {
+            printTreeInorder(node->left);
+            std::cout << node->value << " ";
+            printTreeInorder(node->right);
+        }
+    }
 
-    // Function to insert a child node as the left child of a parent node
-    static void insertLeft(TreeNode<T>* parent, TreeNode<T>* child);
-
-    static void printTreePreorder(TreeNode<T>* node);
-    static void printTreeInorder(TreeNode<T>* node);
-    static void printTreePosorder(TreeNode<T>* node);
-
-    // Function for expression parsing and evaluation
-    // void toASTCopy(const std::string& exp);
-    // TreeNode<T>* toASTNew(const std::string& exp);
-
-private:
-    TreeNode<T>* root;
+    /**
+     * @brief Imprime a árvore em pós-ordem
+     * 
+     * @param node Nó raiz da árvore ou subárvore
+     */
+    static void printTreePosorder(TreeNode<T>* node){
+        if (node) {
+            printTreePosorder(node->left);
+            printTreePosorder(node->right);
+            std::cout << node->value << " ";
+        }
+    }
 
 };
-
-
-// BinaryTree implementation
-template <typename T>
-BinaryTree<T>::BinaryTree() : root(nullptr) {}
-
-template <typename T>
-void BinaryTree<T>::insertRight(TreeNode<T>* parent, TreeNode<T>* child) {
-    if (parent) {
-        parent->right = child;
-    }
-}
-
-template <typename T>
-void BinaryTree<T>::insertLeft(TreeNode<T>* parent, TreeNode<T>* child) {
-    if (parent) {
-        parent->left = child;
-    }
-}
-
-template <typename T>
-void BinaryTree<T>::printTreePreorder(TreeNode<T>* node) {
-    if (node) {
-        std::cout << node->value << " ";
-        printTreePreorder(node->left);
-        printTreePreorder(node->right);
-    }
-}
-
-template <typename T>
-void BinaryTree<T>::printTreeInorder(TreeNode<T>* node) {
-    if (node) {
-        printTreeInorder(node->left);
-        std::cout << node->value << " ";
-        printTreeInorder(node->right);
-    }
-}
-
-template <typename T>
-void BinaryTree<T>::printTreePosorder(TreeNode<T>* node) {
-    if (node) {
-        printTreePosorder(node->left);
-        printTreePosorder(node->right);
-        std::cout << node->value << " ";
-    }
-}
-
-// TreeNode implementation
-template <typename T>
-TreeNode<T>::TreeNode(const T& value) : value(value), left(nullptr), right(nullptr) {}
-
-// template class TreeNode<char>;
 
 #endif // TREE_HPP
