@@ -26,7 +26,7 @@ int main(){
     BinaryTree<char>::printTreePosorder(root, printNodeData);
     cout << endl;
 
-    std::string vals = "e0e";
+    std::string vals = "10a"; // Problema no ultimo char
     std::string res = sat_tree(root, vals);
 
     cout << "SAT: " << (res == ""? "IMPOSSIBLE": res) << endl;

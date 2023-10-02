@@ -97,7 +97,7 @@ TreeNode<char>* postfixToAST(const std::string& postfix) {
 
 bool evaluateExpression(TreeNode<char>* root, int arr[100]){
     if(root == nullptr) return false;
-    if(root->left == nullptr && root->right == nullptr){
+        if(root->left == nullptr && root->right == nullptr){
         return arr[root->value - '0'];
     }
     else if(root->value == '~'){
@@ -225,6 +225,7 @@ std::string sat_tree(TreeNode<char> *ast_exp, std::string vals){
             bool left = cur->left->value.res, right = cur->right->value.res;
             cur->value.res = (cur->value.type == AND ? (left && right) : (left || right));
 
+            // Compondo a string de satisfatibilidade
             // if(left && right) {
             //     cur->value.data = cur->left->value.data;
             //     cur->value.data[idx_quantifier[cur->value.idx]] = 'a';
