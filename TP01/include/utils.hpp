@@ -72,11 +72,13 @@ bool evaluateExpression(std::string exp, std::string vals);
  * @brief Função que avalia a satisfatibilidade de uma expressão lógica
  * 
  * @param ast_exp Árvore de expressão lógica
- * @param vals Valores para as variáveis da expressão (a -> "para todo", e -> "existe", 0 -> "falso", 1 -> "verdadeiro") 
- * @param res Resultado da avaliação da expressão, se for verdadeira, retorna os valores das variáveis que satisfazem a expressão, quando não importa o valor da variável, retorna 'a'
- * @return true Se a expressão for verdadeira
- * @return false Se a expressão for falsa
+ * @param vals Valores para as variáveis da expressão (a -> "para todo", e -> "existe", 0 -> "falso", 1 -> "verdadeiro")
+ * @return std::string Resultado da avaliação da expressão, 
+ * se for verdadeira, retorna os valores das variáveis que 
+ * satisfazem a expressão, quando não importa o valor da variável, 
+ * retorna 'a' na posição da string analisada. Retorna string vazia
+ * se a expressão for falsa.
  */
-bool sat_tree(TreeNode<char> *ast_exp, std::string vals, std::string &res);
+std::string sat_tree(TreeNode<char> *ast_exp, std::string vals);
 
 #endif // UTILS_HPP

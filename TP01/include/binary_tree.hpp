@@ -4,6 +4,11 @@
 #include <iostream>
 #include <string>
 
+#include "stack.hpp"
+
+#ifndef MAX_STACK
+#define MAX_STACK 100
+#endif
 /**
  * @brief Classe que representa um nó de uma árvore binária
  * 
@@ -15,6 +20,11 @@ public:
     // Construtor para inicializar um nó de árvore com um valor
     TreeNode(const T& value): value(value), left(nullptr), right(nullptr) {}
 
+    // Destrutor para desalocar memória
+    ~TreeNode() {
+        delete left;
+        delete right;
+    }
     T value;
     TreeNode<T>* left;
     TreeNode<T>* right;
@@ -58,11 +68,19 @@ public:
      * 
      * @param node Nó raiz da árvore ou subárvore
      */
-    static void printTreePreorder(TreeNode<T>* node){
-        if (node) {
-            std::cout << node->value << " ";
-            printTreePreorder(node->left);
-            printTreePreorder(node->right);
+    static void printTreePreorder(TreeNode<T>* node, void (*print)(T data)){
+        if(node == nullptr) return;
+
+        Stack<TreeNode<T>*> stack(MAX_STACK);
+        stack.push(node);
+
+        while(!stack.isEmpty()){
+            TreeNode<T>* cur = stack.top(); stack.pop();
+
+            print(cur->value);
+
+            if(cur->right != nullptr) stack.push(cur->right);
+            if(cur->left != nullptr) stack.push(cur->left);
         }
     }
     
@@ -71,11 +89,21 @@ public:
      * 
      * @param node Nó raiz da árvore ou subárvore
      */
-    static void printTreeInorder(TreeNode<T>* node){
-        if (node) {
-            printTreeInorder(node->left);
-            std::cout << node->value << " ";
-            printTreeInorder(node->right);
+    static void printTreeInorder(TreeNode<T>* node, void (*print)(T data)){
+        if(node == nullptr) return;
+
+        Stack<TreeNode<T>*> stack(MAX_STACK);
+        TreeNode<T>* cur = node;
+
+        while(!stack.isEmpty() || cur != nullptr){
+            if(cur != nullptr){
+                stack.push(cur);
+                cur = cur->left;
+            }else{
+                cur = stack.top(); stack.pop();
+                print(cur->value);
+                cur = cur->right;
+            }
         }
     }
 
@@ -84,11 +112,31 @@ public:
      * 
      * @param node Nó raiz da árvore ou subárvore
      */
-    static void printTreePosorder(TreeNode<T>* node){
-        if (node) {
-            printTreePosorder(node->left);
-            printTreePosorder(node->right);
-            std::cout << node->value << " ";
+    static void printTreePosorder(TreeNode<T>* node, void (*print)(T data)){
+        if(node == nullptr) return;
+
+        Stack<TreeNode<char>*> stack(MAX_STACK);
+        TreeNode<char>* cur = node;
+        TreeNode<char>* last = nullptr;
+
+        while (!stack.isEmpty() || cur != nullptr) {
+            if (cur) {
+                stack.push(cur);
+                cur = cur->left;
+            } else {
+                TreeNode<char>* aux = stack.top();
+
+                // Se o nó do topo da pilha tem um filho direito e esse filho direito
+                // não foi visitado ainda, então vamos para o filho direito.
+                // Posordem -> esquerda, direita, raiz 
+                if (aux->right != nullptr && last != aux->right) {
+                    cur = aux->right;
+                } else {
+                    print(aux->value);
+                    last = stack.top();
+                    stack.pop();
+                }
+            }
         }
     }
 

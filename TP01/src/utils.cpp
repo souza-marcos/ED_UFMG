@@ -85,7 +85,6 @@ TreeNode<char>* postfixToAST(const std::string& postfix) {
             stack.pop();
         }
         else if (c == '|' || c == '&') {
-            node = new TreeNode<char>(c);
             node->right = stack.top();
             stack.pop();
             node->left = stack.top();
@@ -171,7 +170,7 @@ bool evaluateExpression(std::string exp, std::string vals){
     return evaluateExpression(exp, arr);
 }
 
-bool sat_tree(TreeNode<char> *ast_exp, std::string vals, std::string &res){
+std::string sat_tree(TreeNode<char> *ast_exp, std::string vals){
 
     // Lista dos indices dos quantificadores
     int idx_quantifier[5]; 
@@ -226,6 +225,18 @@ bool sat_tree(TreeNode<char> *ast_exp, std::string vals, std::string &res){
             bool left = cur->left->value.res, right = cur->right->value.res;
             cur->value.res = (cur->value.type == AND ? (left && right) : (left || right));
 
+            // if(left && right) {
+            //     cur->value.data = cur->left->value.data;
+            //     cur->value.data[idx_quantifier[cur->value.idx]] = 'a';
+            // }
+            // else if (left){ // left é o nó que possui o valor falso
+            //     cur->value.data = cur->left->value.data;
+            //     cur->value.data[idx_quantifier[cur->value.idx]] = '0';
+            // }else if(right){ // right é o nó que possui o valor verdadeiro
+            //     cur->value.data = cur->right->value.data;
+            //     cur->value.data[idx_quantifier[cur->value.idx]] = '1';
+            // }
+
             // Deletando os filhos 
             delete cur->left; delete cur->right;
             cur->left = nullptr; cur->right = nullptr;
@@ -250,5 +261,8 @@ bool sat_tree(TreeNode<char> *ast_exp, std::string vals, std::string &res){
     }
     
     std::cout << "ROOT: " << (root->value.type == AND ? "AND": root->value.type == OR? "OR": "NONE") << " " << root->value.res << "\n";
-    return cur->value.res;
+    Element aux = cur->value;
+    delete cur;
+    if(!(aux.res)) return "";
+    return aux.data;
 }

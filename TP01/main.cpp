@@ -7,6 +7,10 @@
 
 using std::cout, std::string;
 
+void printNodeData(char data){
+    cout << data << " ";
+}
+
 int main(){
 
     char expression[100] = "0 | 1 & 2\0";
@@ -14,13 +18,21 @@ int main(){
     std::cout << "POSTFIX EXPRESSION -> " << postfix << endl;
 
     TreeNode<char>* root = postfixToAST(postfix);
-    BinaryTree<char>::printTreeInorder(root);
 
-    std::string vals = "a01";
-    std::string res = "";
-    cout << "SAT: \n" << (sat_tree(root, vals, res)?"TRUE":"FALSE") << endl;
+    BinaryTree<char>::printTreePreorder(root, printNodeData);
+    cout << endl;
+    BinaryTree<char>::printTreeInorder(root, printNodeData);
+    cout << endl;
+    BinaryTree<char>::printTreePosorder(root, printNodeData);
+    cout << endl;
 
+    std::string vals = "e0e";
+    std::string res = sat_tree(root, vals);
+
+    cout << "SAT: " << (res == ""? "IMPOSSIBLE": res) << endl;
     
+    delete root;
+
     return 0;
 }
 
