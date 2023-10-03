@@ -173,7 +173,7 @@ bool evaluateExpression(std::string exp, std::string vals){
 std::string sat_tree(TreeNode<char> *ast_exp, std::string vals){
 
     // Lista dos indices dos quantificadores
-    int idx_quantifier[5]; 
+    int idx_quantifier[6]; 
     memset(idx_quantifier, -1, sizeof(idx_quantifier)); // -1 significa que não há mais quantificadores
     
     for(size_t i = 0, idx = 0; idx < vals.size(); idx++) 
@@ -208,7 +208,7 @@ std::string sat_tree(TreeNode<char> *ast_exp, std::string vals){
         int i = cur->value.idx + 1; // Indice de controle sobre a posicao dos quantificadores
 
         // Se o nó atual é uma folha, podemos resolvê-lo 
-        if(i >= 5 || idx_quantifier[i] == -1){
+        if(i >= 4 || idx_quantifier[i] == -1){
             cur->value.res = evaluateExpression(ast_exp, cur->value.data);
 
             // LOG
@@ -226,17 +226,17 @@ std::string sat_tree(TreeNode<char> *ast_exp, std::string vals){
             cur->value.res = (cur->value.type == AND ? (left && right) : (left || right));
 
             // Compondo a string de satisfatibilidade
-            // if(left && right) {
-            //     cur->value.data = cur->left->value.data;
-            //     cur->value.data[idx_quantifier[cur->value.idx]] = 'a';
-            // }
-            // else if (left){ // left é o nó que possui o valor falso
-            //     cur->value.data = cur->left->value.data;
-            //     cur->value.data[idx_quantifier[cur->value.idx]] = '0';
-            // }else if(right){ // right é o nó que possui o valor verdadeiro
-            //     cur->value.data = cur->right->value.data;
-            //     cur->value.data[idx_quantifier[cur->value.idx]] = '1';
-            // }
+            if(left && right) { // Tanto faz o valor da variavel
+                cur->value.data = cur->left->value.data;
+                cur->value.data[idx_quantifier[cur->value.idx]] = 'a';
+            }
+            else if (left){ // left é o nó que possui o valor falso
+                cur->value.data = cur->left->value.data;
+                cur->value.data[idx_quantifier[cur->value.idx]] = '0';
+            }else if(right){ // right é o nó que possui o valor verdadeiro
+                cur->value.data = cur->right->value.data;
+                cur->value.data[idx_quantifier[cur->value.idx]] = '1';
+            }
 
             // Deletando os filhos 
             delete cur->left; delete cur->right;
@@ -249,10 +249,10 @@ std::string sat_tree(TreeNode<char> *ast_exp, std::string vals){
         char val = vals[idx_quantifier[i]]; 
         cur->value.type = (val == 'a' ? AND : OR); // Tipo de operação que deverá ser realizada após obter os valores dos filhos
 
-        std::string copy = cur->value.data; copy[i] = '0';
+        std::string copy = cur->value.data; copy[idx_quantifier[i]] = '0';
         TreeNode<Element> *left_node = new TreeNode<Element>(Element{copy, i}); 
         
-        copy[i] = '1';
+        copy[idx_quantifier[i]] = '1';
         TreeNode<Element> *right_node = new TreeNode<Element>(Element{copy, i});
         
         BinaryTree<Element>::insertLeft(cur, left_node);
