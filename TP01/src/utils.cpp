@@ -5,6 +5,7 @@
 #include <cstring>
 #include <string>
 
+const int MAX_SIZE_QUANTIFIERS = 10;
 const size_t MAX_SIZE_STACK  = 100;
 
 int getPrecedence(char op) {
@@ -21,107 +22,60 @@ int getPrecedence(char op) {
 }
 
 std::string infixToPostfix(const char* infix) {
+
+    // Pilha para armazenar os operadores e parenteses
     Stack<char> stack = Stack<char>(MAX_SIZE_STACK);
 
     char postfix[100]; 
     
     int postfixIndex = 0;
     
+    // Percorrendo a expressão infixa
     for (int cont = 0; infix[cont] != '\0'; cont++) {
-        if (infix[cont] == ' ') {
-            continue;
-        }
+        if (infix[cont] == ' ') continue; 
+        
         char c = infix[cont];
 
-        switch (c) {
-            case '|':
-            case '&':
-            case '~':
-                while (!stack.isEmpty() && getPrecedence(c) <= getPrecedence(stack.top())) {
-                    postfix[postfixIndex++] = stack.top();
-                    stack.pop();
-                }
-                stack.push(c);
-                break;
+        if(c == '|' || c == '&' || c == '~'){
+            // Se for um operador, verifica se eh necessario resgatar valores da pilha
+            while (!stack.isEmpty() && getPrecedence(c) <= getPrecedence(stack.top())) {
+                postfix[postfixIndex++] = stack.top();
+                stack.pop();
+            }
 
-            case '(':
-                stack.push(c);
-                break;
-
-            case ')':
-                while (stack.top() != '(') {
-                    postfix[postfixIndex++] = stack.top();
-                    stack.pop();
-                }
-                if (stack.top() == '(') stack.pop();
-                break;
-
-            default:
-                postfix[postfixIndex++] = c;
-                break;
+            stack.push(c);
         }
+        else if(c == '('){
+            stack.push(c);
+        }
+        else if(c == ')'){
+            // Resgata a expressão entre parenteses
+            while (stack.top() != '(') {
+                postfix[postfixIndex++] = stack.top();
+                stack.pop();
+            }
+            if (stack.top() == '(') stack.pop();
+        }
+        else{
+            // Se for uma variavel, ja a adiciona na pilha
+            postfix[postfixIndex++] = c;
+        }
+
     }
     
+    // Resgata o restante dos operadores
     while (!stack.isEmpty()) {
         postfix[postfixIndex++] = stack.top();
         stack.pop();
     }
     
-    // Null-terminate the result
-    postfix[postfixIndex] = '\0';
-    
     return std::string(postfix);
-}
-
-TreeNode<char>* postfixToAST(const std::string& postfix) {
-    Stack<TreeNode<char>*> stack = Stack<TreeNode<char>*>(MAX_SIZE_STACK);
-    TreeNode<char>* node;
-
-    for (int cont = 0; postfix[cont] != '\0'; cont++) {
-        char c = postfix[cont];
-        node = new TreeNode<char>(c);
-        if (c == '~'){
-            node->left = stack.top();
-            stack.pop();
-        }
-        else if (c == '|' || c == '&') {
-            node->right = stack.top();
-            stack.pop();
-            node->left = stack.top();
-            stack.pop();
-        }
-        stack.push(node);
-    }
-    return stack.top();
-}
-
-bool evaluateExpression(TreeNode<char>* root, int arr[100]){
-    if(root == nullptr) return false;
-        if(root->left == nullptr && root->right == nullptr){
-        return arr[root->value - '0'];
-    }
-    else if(root->value == '~'){
-        return !evaluateExpression(root->left, arr);
-    }
-    else if(root->value == '|'){
-        return evaluateExpression(root->left, arr) || evaluateExpression(root->right, arr);
-    }
-    else if(root->value == '&'){
-        return evaluateExpression(root->left, arr) && evaluateExpression(root->right, arr);
-    }
-    return false;
-}
-
-bool evaluateExpression(TreeNode<char>* root, std::string vals){
-    // Transformar a string de valores em um array de inteiros
-    int arr[100];
-    for(size_t i = 0; i < vals.size(); i++) arr[i] = vals[i] - '0';
-    return evaluateExpression(root, arr);
 }
 
 bool evaluateExpression(std::string exp, int arr[100]){
     size_t i = 0;
 
+    // Struct para armazenar os dados de cada elemento da pilha
     struct Element{
         bool isresolved = false;
         int el;
@@ -132,14 +86,15 @@ bool evaluateExpression(std::string exp, int arr[100]){
     Stack<Element> stack(MAX_SIZE_STACK);
     while(i < exp.size()){
         Element aux;
-        if(exp[i] == '~'){
+
+        if(exp[i] == '~'){ // Resolve o topo da pilha -> Inverte ele
             aux = stack.top(); 
             int val = (aux.isresolved ? aux.el : arr[aux.el]); 
             stack.pop();
             stack.push(Element{true, !val});
         }
-        else if(exp[i] == '|' || exp[i] == '&'){
-            // Is operator
+        else if(exp[i] == '|' || exp[i] == '&'){ // Resolve os dois nós do top da pilha -> empilha o resultado 
+
             aux = stack.top();
             int val1 = (aux.isresolved ? aux.el : arr[aux.el]); 
             stack.pop();
@@ -170,10 +125,10 @@ bool evaluateExpression(std::string exp, std::string vals){
     return evaluateExpression(exp, arr);
 }
 
-std::string sat_tree(TreeNode<char> *ast_exp, std::string vals){
+std::string sat_tree(std::string postfix_exp, std::string vals){
 
     // Lista dos indices dos quantificadores
-    int idx_quantifier[6]; 
+    int idx_quantifier[MAX_SIZE_QUANTIFIERS]; 
     memset(idx_quantifier, -1, sizeof(idx_quantifier)); // -1 significa que não há mais quantificadores
     
     for(size_t i = 0, idx = 0; idx < vals.size(); idx++) 
@@ -208,11 +163,11 @@ std::string sat_tree(TreeNode<char> *ast_exp, std::string vals){
         int i = cur->value.idx + 1; // Indice de controle sobre a posicao dos quantificadores
 
         // Se o nó atual é uma folha, podemos resolvê-lo 
-        if(i >= 4 || idx_quantifier[i] == -1){
-            cur->value.res = evaluateExpression(ast_exp, cur->value.data);
+        if(i >= MAX_SIZE_QUANTIFIERS || idx_quantifier[i] == -1){
+            cur->value.res = evaluateExpression(postfix_exp, cur->value.data);
 
             // LOG
-            std::cout << "FOLHA " << cur->value.data << ", RES: " << cur->value.res << "\n";
+            // std::cout << "FOLHA " << cur->value.data << ", RES: " << cur->value.res << "\n";
             continue;
         }
 
@@ -220,7 +175,7 @@ std::string sat_tree(TreeNode<char> *ast_exp, std::string vals){
         if(cur->left != nullptr && cur->right != nullptr){ // Talvez ocorra algum erro aqui !!!
             
             // LOG
-            std::cout << "NO INTERNO " << (cur->value.type == AND?"AND ":"OR ") << cur->value.data << "\n";
+            // std::cout << "NO INTERNO " << (cur->value.type == AND?"AND ":"OR ") << cur->value.data << "\n";
 
             bool left = cur->left->value.res, right = cur->right->value.res;
             cur->value.res = (cur->value.type == AND ? (left && right) : (left || right));
@@ -228,14 +183,14 @@ std::string sat_tree(TreeNode<char> *ast_exp, std::string vals){
             // Compondo a string de satisfatibilidade
             if(left && right) { // Tanto faz o valor da variavel
                 cur->value.data = cur->left->value.data;
-                cur->value.data[idx_quantifier[cur->value.idx]] = 'a';
+                cur->value.data[idx_quantifier[cur->left->value.idx]] = 'a';
             }
             else if (left){ // left é o nó que possui o valor falso
                 cur->value.data = cur->left->value.data;
-                cur->value.data[idx_quantifier[cur->value.idx]] = '0';
+                cur->value.data[idx_quantifier[cur->left->value.idx]] = '0';
             }else if(right){ // right é o nó que possui o valor verdadeiro
                 cur->value.data = cur->right->value.data;
-                cur->value.data[idx_quantifier[cur->value.idx]] = '1';
+                cur->value.data[idx_quantifier[cur->right->value.idx]] = '1';
             }
 
             // Deletando os filhos 
@@ -261,7 +216,7 @@ std::string sat_tree(TreeNode<char> *ast_exp, std::string vals){
         stack.push(cur); stack.push(right_node); stack.push(left_node); // Empilhando os nós
     }
     
-    std::cout << "ROOT: " << (root->value.type == AND ? "AND": root->value.type == OR? "OR": "NONE") << " " << root->value.res << "\n";
+    // std::cout << "ROOT: " << (root->value.type == AND ? "AND": root->value.type == OR? "OR": "NONE") << " " << root->value.res << "\n";
     Element aux = cur->value;
     delete cur;
     if(!(aux.res)) return "";

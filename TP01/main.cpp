@@ -11,28 +11,36 @@ void printNodeData(char data){
     cout << data << " ";
 }
 
-int main(){
+int main(int argc, char *argv[]){
 
-    char expression[100] = "0 | 1 & 2\0";
-    std::string postfix = infixToPostfix(expression);
-    std::cout << "POSTFIX EXPRESSION -> " << postfix << endl;
-
-    TreeNode<char>* root = postfixToAST(postfix);
-
-    BinaryTree<char>::printTreePreorder(root, printNodeData);
-    cout << endl;
-    BinaryTree<char>::printTreeInorder(root, printNodeData);
-    cout << endl;
-    BinaryTree<char>::printTreePosorder(root, printNodeData);
-    cout << endl;
-
-    std::string vals = "10a"; // Problema no ultimo char
-    std::string res = sat_tree(root, vals);
-
-    cout << "SAT: " << (res == ""? "IMPOSSIBLE": res) << endl;
+    if(argc != 4){
+        // cout << "Usage: " << argv[0] << " <type> <expression> <values> " << endl;
+        return 1;
+    }
     
-    delete root;
+    char* infix = argv[2];
 
+    // Removendo as aspas
+    for(int i = 0; infix[i] != '\0'; i++)
+        if(infix[i] == '\"') infix[i] = ' ';
+
+    std::string postfix = infixToPostfix(infix);
+    string vals = argv[3];
+    // cout << "Postfix: " << postfix << endl;
+
+    if(string(argv[1]) == "-s"){
+        string res = sat_tree(postfix, vals);
+        cout << (res == ""? "0": res) << endl;
+        return 0;
+    }
+    else if(string(argv[1]) == "-a"){
+        bool res = evaluateExpression(postfix, vals);
+        cout << res << endl;
+    } 
+    else{
+        // cout << "Invalid type, '-s' for "  << endl;
+        return 1;
+    }
     return 0;
 }
 

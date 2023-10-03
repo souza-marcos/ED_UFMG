@@ -21,34 +21,6 @@ int getPrecedence(char op);
 std::string infixToPostfix(const char* infix);
 
 /**
- * @brief Função que converte uma expressão lógica em forma posfixada para uma árvore de expressão lógica
- * 
- * @param postfix Expressão lógica em forma posfixada
- * @return TreeNode<char>* Raiz da Árvore de expressão lógica
- */
-TreeNode<char>* postfixToAST(const std::string& postfix);
-
-/**
- * @brief Função que avalia uma expressão lógica
- * 
- * @param root Árvore de expressão lógica
- * @param arr Valores para as variáveis da expressão
- * @return true Se a expressão for verdadeira
- * @return false Se a expressão for falsa
- */
-bool evaluateExpression(TreeNode<char>* root, int arr[100]);
-
-/**
- * @brief Função que avalia uma expressão lógica
- * 
- * @param root Árvore de expressão lógica
- * @param vals Valores para as variáveis da expressão
- * @return true Se a expressão for verdadeira
- * @return false Se a expressão for falsa
- */
-bool evaluateExpression(TreeNode<char>* root, std::string vals);
-
-/**
  * @brief Função que avalia uma expressão lógica
  * 
  * @param exp Expressão lógica em forma posfixada
@@ -71,7 +43,7 @@ bool evaluateExpression(std::string exp, std::string vals);
 /**
  * @brief Função que avalia a satisfatibilidade de uma expressão lógica
  * 
- * @param ast_exp Árvore de expressão lógica
+ * @param postfix_exp string posfixada da espressão
  * @param vals Valores para as variáveis da expressão (a -> "para todo", e -> "existe", 0 -> "falso", 1 -> "verdadeiro")
  * @return std::string Resultado da avaliação da expressão, 
  * se for verdadeira, retorna os valores das variáveis que 
@@ -79,6 +51,6 @@ bool evaluateExpression(std::string exp, std::string vals);
  * retorna 'a' na posição da string analisada. Retorna string vazia
  * se a expressão for falsa.
  */
-std::string sat_tree(TreeNode<char> *ast_exp, std::string vals);
+std::string sat_tree(std::string postfix_exp, std::string vals);
 
 #endif // UTILS_HPP
