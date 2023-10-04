@@ -5,6 +5,8 @@
 #include <cstring>
 #include <string>
 
+#include <cassert>
+
 const int MAX_SIZE_QUANTIFIERS = 10;
 const size_t MAX_SIZE_STACK  = 100;
 
@@ -38,7 +40,7 @@ std::string infixToPostfix(const char* infix) {
 
         if(c == '|' || c == '&' || c == '~'){
             // Se for um operador, verifica se eh necessario resgatar valores da pilha
-            while (!stack.isEmpty() && getPrecedence(c) <= getPrecedence(stack.top())) {
+            while (!stack.isEmpty() && getPrecedence(c) < getPrecedence(stack.top())) {
                 postfix[postfixIndex++] = stack.top();
                 stack.pop();
             }
@@ -146,9 +148,8 @@ std::string sat_tree(std::string postfix_exp, std::string vals){
         enum types type;
         std::string data;
         bool res;
-        Element(std::string data, int idx): idx(idx){
+        Element(std::string data, int idx): idx(idx), res(false){
             this->data = data;
-            res = 0;
         }
     };
 
@@ -182,7 +183,17 @@ std::string sat_tree(std::string postfix_exp, std::string vals){
 
             // Compondo a string de satisfatibilidade
             if(left && right) { // Tanto faz o valor da variavel
-                cur->value.data = cur->left->value.data;
+                std::string val_left = cur->left->value.data, val_right = cur->right->value.data; 
+
+                cur->value.data = val_left;
+
+                for(int i = cur->value.idx + 1; i < MAX_SIZE_QUANTIFIERS && idx_quantifier[i] != -1; i++){
+                    int idx = idx_quantifier[i];
+                    if(val_left[idx] != val_right[idx]){
+                        cur->value.data[idx] = (val_left[idx] == 'a'? val_right[idx]: val_left[idx]);
+                    }
+                }
+                
                 cur->value.data[idx_quantifier[cur->left->value.idx]] = 'a';
             }
             else if (left){ // left é o nó que possui o valor falso

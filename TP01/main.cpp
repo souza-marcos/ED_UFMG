@@ -26,11 +26,10 @@ int main(int argc, char *argv[]){
 
     std::string postfix = infixToPostfix(infix);
     string vals = argv[3];
-    // cout << "Postfix: " << postfix << endl;
 
     if(string(argv[1]) == "-s"){
         string res = sat_tree(postfix, vals);
-        cout << (res == ""? "0": res) << endl;
+        cout << (res == ""? "0": "1 " + res) << endl;
         return 0;
     }
     else if(string(argv[1]) == "-a"){

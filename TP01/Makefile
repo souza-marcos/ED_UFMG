@@ -11,7 +11,7 @@ CFLAGS = -g -std=c++17 -Wall -c -I$(INC)
 
 EXE = $(BIN)/main
 
-compile: $(EXE)
+all: $(EXE)
 
 test: $(EXE)
 	echo "\nTESTES NO EVALUATOR\n"
