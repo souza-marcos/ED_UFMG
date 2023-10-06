@@ -2,7 +2,7 @@
 #define UTILS_HPP
 
 #include <string>
-#include "binary_tree.hpp"
+#include "binary_tree.h"
 
 /**
  * @brief Função que retorna a precedência de um operador

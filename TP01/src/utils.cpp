@@ -1,6 +1,6 @@
-#include "utils.hpp"
-#include "binary_tree.hpp"
-#include "stack.hpp"
+#include "utils.h"
+#include "binary_tree.h"
+#include "stack.h"
 
 #include <cstring>
 #include <string>
@@ -133,10 +133,11 @@ std::string sat_tree(std::string postfix_exp, std::string vals){
     int idx_quantifier[MAX_SIZE_QUANTIFIERS]; 
     memset(idx_quantifier, -1, sizeof(idx_quantifier)); // -1 significa que não há mais quantificadores
     
-    for(size_t i = 0, idx = 0; idx < vals.size(); idx++) 
+    int qtd_quantifier = 0; 
+    for(size_t idx = 0; idx < vals.size(); idx++) 
         if(vals[idx] == 'e' || vals[idx] == 'a') 
-            idx_quantifier[i ++] = idx;
-
+            idx_quantifier[qtd_quantifier ++] = idx; 
+    
     // Tipos para verficarmos qual operação deve ser feita após obter os valores dos nós filhos
     enum types {    
         AND, OR, NONE
@@ -153,7 +154,7 @@ std::string sat_tree(std::string postfix_exp, std::string vals){
         }
     };
 
-    TreeNode<Element> *root = new TreeNode<Element>(Element{vals, -1});
+    TreeNode<Element> *root = new TreeNode<Element>(Element{vals, qtd_quantifier});
     TreeNode<Element> *cur = root;
 
     Stack<TreeNode<Element>*> stack(MAX_SIZE_STACK);
@@ -161,10 +162,10 @@ std::string sat_tree(std::string postfix_exp, std::string vals){
     stack.push(root);
     while(!stack.isEmpty()){
         cur = stack.top(); stack.pop();
-        int i = cur->value.idx + 1; // Indice de controle sobre a posicao dos quantificadores
-
+        int i = cur->value.idx - 1; // Indice de controle sobre a posicao dos quantificadores
+        
         // Se o nó atual é uma folha, podemos resolvê-lo 
-        if(i >= MAX_SIZE_QUANTIFIERS || idx_quantifier[i] == -1){
+        if(i == -1){ // || idx_quantifier[i] == -1
             cur->value.res = evaluateExpression(postfix_exp, cur->value.data);
 
             // LOG
@@ -187,10 +188,17 @@ std::string sat_tree(std::string postfix_exp, std::string vals){
 
                 cur->value.data = val_left;
 
-                for(int i = cur->value.idx + 1; i < MAX_SIZE_QUANTIFIERS && idx_quantifier[i] != -1; i++){
+                // Faz a verificação até o quantificador anterior
+                for(int i = 0; i < cur->value.idx && idx_quantifier[i] != -1; i++){
                     int idx = idx_quantifier[i];
                     if(val_left[idx] != val_right[idx]){
+                        // *** 1 *** , *** a *** -> *** 1 ***
+                        // *** 0 *** , *** a *** -> *** 0 ***
+                        // *** 1 *** , *** 0 *** -> *** a ***
+                        // *** 0 *** , *** 1 *** -> *** a ***
+
                         cur->value.data[idx] = (val_left[idx] == 'a'? val_right[idx]: val_left[idx]);
+
                     }
                 }
                 

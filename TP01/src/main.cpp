@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include "binary_tree.hpp"
-#include "utils.hpp"
+#include "binary_tree.h"
+#include "utils.h"
 
 #define endl '\n'
 

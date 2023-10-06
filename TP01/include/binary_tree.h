@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 
-#include "stack.hpp"
+#include "stack.h"
 
 #ifndef MAX_STACK
 #define MAX_STACK 100

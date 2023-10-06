@@ -6,7 +6,7 @@ INC = include
 BIN = bin
 # Oldest $(OBJ)/stack.o 
 OBJS = $(OBJ)/utils.o $(OBJ)/main.o 
-HDRS =  $(INC)/stack.hpp $(INC)/binary_tree.hpp $(INC)/utils.hpp
+HDRS =  $(INC)/stack.h $(INC)/binary_tree.h $(INC)/utils.h
 CFLAGS = -g -std=c++17 -Wall -c -I$(INC)
 
 EXE = $(BIN)/main
@@ -18,10 +18,12 @@ test: $(EXE)
 	$(EXE) -a "0 | 1" 01
 	$(EXE) -a "0 | 1 & 2" 010
 	$(EXE) -a "~ ( 0 | 1 ) & 2" 101
+	$(EXE) -a "~ ~ 0 | 1" 10
 
-	echo "\nTESTES NO SAT\n"
 	$(EXE) -s "0 | 1 & 2" 0e0
 	$(EXE) -s "0 | 1 & 2" e00
+	$(EXE) -s "0 | 1" ea 
+	$(EXE) -s "0 | ~ ~ 1" ea
 	$(EXE) -s "0 | 1 & 2" e11
 	$(EXE) -s "0 | 1 & 2 & 3" e11e
 # a111 ou 111a ????
@@ -29,8 +31,8 @@ test: $(EXE)
 $(BIN)/main: $(OBJS)
 	$(CC) -g -std=c++11 -o $(BIN)/main $(OBJS) $(LIBS)
 
-$(OBJ)/main.o: $(HDRS) main.cpp
-	$(CC) $(CFLAGS) -o $(OBJ)/main.o main.cpp
+$(OBJ)/main.o: $(HDRS) $(SRC)/main.cpp
+	$(CC) $(CFLAGS) -o $(OBJ)/main.o $(SRC)/main.cpp
 
 # $(OBJ)/stack.o: $(HDRS) $(SRC)/stack.cpp
 # 	$(CC) $(CFLAGS) -o $(OBJ)/stack.o $(SRC)/stack.cpp
