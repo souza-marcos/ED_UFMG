@@ -28,9 +28,7 @@ std::string infixToPostfix(const char* infix) {
     // Pilha para armazenar os operadores e parenteses
     Stack<char> stack = Stack<char>(MAX_SIZE_STACK);
 
-    char postfix[100]; 
-    
-    int postfixIndex = 0;
+    std::string postfix;
     
     // Percorrendo a expressão infixa
     for (int cont = 0; infix[cont] != '\0'; cont++) {
@@ -41,7 +39,7 @@ std::string infixToPostfix(const char* infix) {
         if(c == '|' || c == '&' || c == '~'){
             // Se for um operador, verifica se eh necessario resgatar valores da pilha
             while (!stack.isEmpty() && getPrecedence(c) < getPrecedence(stack.top())) {
-                postfix[postfixIndex++] = stack.top();
+                postfix += stack.top();
                 stack.pop();
             }
 
@@ -53,25 +51,25 @@ std::string infixToPostfix(const char* infix) {
         else if(c == ')'){
             // Resgata a expressão entre parenteses
             while (stack.top() != '(') {
-                postfix[postfixIndex++] = stack.top();
+                postfix += stack.top();
                 stack.pop();
             }
             if (stack.top() == '(') stack.pop();
         }
         else{
             // Se for uma variavel, ja a adiciona na pilha
-            postfix[postfixIndex++] = c;
+            postfix += c;
         }
 
     }
     
     // Resgata o restante dos operadores
     while (!stack.isEmpty()) {
-        postfix[postfixIndex++] = stack.top();
+        postfix += stack.top();
         stack.pop();
     }
     
-    return std::string(postfix);
+    return postfix;
 }
 
 bool evaluateExpression(std::string exp, int arr[100]){

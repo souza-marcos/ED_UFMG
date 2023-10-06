@@ -25,6 +25,9 @@ int main(int argc, char *argv[]){
         if(infix[i] == '\"') infix[i] = ' ';
 
     std::string postfix = infixToPostfix(infix);
+
+    cout << postfix << endl;
+
     string vals = argv[3];
 
     if(string(argv[1]) == "-s"){
