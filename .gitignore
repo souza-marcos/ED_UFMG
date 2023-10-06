@@ -8,5 +8,8 @@
 *.log
 *.pdf
 *.gz
-*.tex
 *.zip
+*.o
+*.out
+*.fdb_latexmk
+*.fls
