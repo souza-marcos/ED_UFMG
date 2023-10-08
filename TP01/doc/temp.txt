@@ -1,0 +1,11 @@
+
+Exemplo: $(EXE) -s "0 | 1 & 2 & 3" e11e 	
+
+Vetor valores das variáveis: 						              e11e
+Nós internos após a valoração da última variável:		    e111		e110
+Nós folhas:					 	                    1111	0111		1110	0110
+Valores da expressão dada a valoração anterior:	    (TRUE)	(TRUE)		(TRUE)	(FALSE)
+Com base nos valores, montamos nossa string:		    	a111		1110
+Resultado da expressão:							                  111a
+
+

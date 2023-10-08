@@ -9,7 +9,7 @@ OBJS = $(OBJ)/utils.o $(OBJ)/main.o
 HDRS =  $(INC)/stack.h $(INC)/binary_tree.h $(INC)/utils.h
 CFLAGS = -g -std=c++17 -Wall -c -I$(INC)
 
-EXE = $(BIN)/main
+EXE = $(BIN)/tp01
 
 all: $(EXE)
 
@@ -28,8 +28,8 @@ test: $(EXE)
 	$(EXE) -s "0 | 1 & 2 & 3" e11e
 # a111 ou 111a ????
 
-$(BIN)/main: $(OBJS)
-	$(CC) -g -std=c++11 -o $(BIN)/main $(OBJS) $(LIBS)
+$(EXE): $(OBJS)
+	$(CC) -g -std=c++11 -o $(EXE) $(OBJS) $(LIBS)
 
 $(OBJ)/main.o: $(HDRS) $(SRC)/main.cpp
 	$(CC) $(CFLAGS) -o $(OBJ)/main.o $(SRC)/main.cpp
