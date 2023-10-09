@@ -26,7 +26,7 @@ int main(int argc, char *argv[]){
 
     std::string postfix = infixToPostfix(infix);
 
-    cout << postfix << endl;
+    // cout << postfix << endl;
 
     string vals = argv[3];
 

@@ -70,12 +70,12 @@ A seguir serão apresentadas as análises de complexidade das principais funçõ
 \subsection{infixToPosfix}
 Como mencionado acima, esta função converte uma expressão infixa para a representação posfixa. Para isso, a função percorre a string contendo a expressão infixa, e para cada caractere, verifica se ele é um operando ou um operador. Caso seja um operando, ele é adicionado à string de saída, caso seja um operador, ele é adicionado à pilha. Ao final da leitura da string, todos os operadores que estão na pilha são adicionados à string de saída. Portanto, a complexidade da função é $O(n)$, onde $n$ é o tamanho da string de entrada.
 
-A complexidade de espaço é $O(n)$, pois a pilha pode conter no máximo $n$ elementos.
+A complexidade de espaço é $O(n)$, pois a pilha pode conter no máximo $n$ elementos (O tamanho da \emph{string}).
 
 \subsection{evaluatePostfix}
 Esta função recebe uma string contendo uma expressão booleana na forma posfixa e um vetor contendo os valores das variáveis da expressão e retorna o resultado da expressão. Para isso, a função percorre a string de entrada, e para cada caractere, verifica se ele é um operando ou um operador. Caso seja um operando, ele é adicionado à pilha, caso seja um operador, ele é removido dois operandos do topo da pilha ou apenas um operando (No caso do operador $\sim$), e o resultado da operação é adicionado à pilha. Ao final da leitura da string, o resultado da expressão é o elemento que está no topo da pilha. Portanto, a complexidade da função é $O(n)$, onde $n$ é o tamanho da string de entrada.
 
-A complexidade de espaço é $O(n)$, pois assim como a função anterior, a pilha pode conter no máximo $n$ elementos.
+A complexidade de espaço é $O(n)$, pois assim como a função anterior, a pilha pode conter no máximo $n$ elementos (O tamanho da \emph{string}).
 
 \subsection{satTree}
 Esta função recebe uma string contendo uma expressão booleana na forma posfixa, um vetor contendo os valores das variáveis da expressão(agora podendo conter quantificadores existe e para todo) e retorna 1 ou 0 caso a expressão seja satisfazível ou não, respectivamente. Caso ela seja satisfazível, uma string contendo a possível solução é retornada. 
