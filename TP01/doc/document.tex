@@ -85,7 +85,7 @@ A árvore possui, portanto, como folhas os possíveis valores para os quantifica
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{./sat_tree.png}
+    \includegraphics[width=\textwidth]{./images/sat_tree.png}
     \caption{Árvore de solução para a expressão $\exists a \exists d , b = c = 1,  (a \lor b \land c \land d)$}
     \label{fig:sat_tree}
 \end{figure}
@@ -101,11 +101,14 @@ A seguir serão apresentados os resultados obtidos na experimentação do progra
 
 \subsection{Localidade de Referência}
 
-Utilizando o programa analisamem, fornecido pelo professor, foi possível observar a localidade de referência do programa.
+Utilizando o programa analisamem, fornecido pelo professor, foi possível observar a localidade de referência do programa. Importante notar que aqui serão apresentadas imagens relacionadas a parte de satisfatibilidade do programa, afinal utiliza a parte de solucionador de equaações booleanas como subrotina.
 
-\subsubsection{Parte 1 - Solucionador de equações booleanas}
-
-
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{./images/sat_tree/registro_s-acesso-0.png}
+    \caption{any}
+    \label{fig:loc_ref_1}
+\end{figure}
 
 \subsection{Tempo de execução}
 
@@ -118,7 +121,7 @@ Teve como base o seguinte comando (Atente-se que estamos variando o número de q
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{./time.png}
+    \includegraphics[width=\textwidth]{./images/time.png}
     \caption{Tempo de execução do programa para diferentes números de quantificadores}
     \label{fig:time}
 \end{figure}
