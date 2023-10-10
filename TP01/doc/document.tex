@@ -10,7 +10,7 @@
             marginparwidth=1.75cm
             ]{geometry}
 
-
+\usepackage{float}
 
 \title{TP01 - Estrutura de dados}
 \author{Marcos Daniel Souza Netto - 2022069492} 
@@ -83,7 +83,7 @@ Esta função recebe uma string contendo uma expressão booleana na forma posfix
 Para isso, a função indexa os quantificadores da expressão, em seguida percorre o vetor dos quantificadores construindo a árvore de solução pelos últimos quantificadores até o primeiro.
 A árvore possui, portanto, como folhas os possíveis valores para os quantificadores (0 ou 1) e desse modo ela possui $2^k$ folhas, onde $k$ é o número de quantificadores, seja existe ou para todo. Para exemplificar considere a figura \ref{fig:sat_tree}.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{./sat_tree.png}
     \caption{Árvore de solução para a expressão $\exists a \exists d , b = c = 1,  (a \lor b \land c \land d)$}
@@ -96,6 +96,32 @@ Já a complexidade de espaço é $O(k)$, pois a solução da árvore é realizad
 \section{Estratégias de robustez}
 
 \section{Análise Experimental}
+
+A seguir serão apresentados os resultados obtidos na experimentação do programa.
+
+\subsection{Localidade de Referência}
+
+Utilizando o programa analisamem, fornecido pelo professor, foi possível observar a localidade de referência do programa.
+
+\subsubsection{Parte 1 - Solucionador de equações booleanas}
+
+
+
+\subsection{Tempo de execução}
+
+Nesse experimento foi realizado medições de tempo de execução a parte de satisfatibilidade do programa, variando o número de quantificadores da expressão. Para isso,
+variamos a quantidade de quantificadores da expressão de 13 até 20, para que possamos observar o comportamento do programa para um número maior de quantificadores.
+Teve como base o seguinte comando (Atente-se que estamos variando o número de quantificadores): 
+
+
+\verb#bin/tp01 -s "0 | 1 | 2 | (...) | 17 | 18 | 19" eeeeeeeeeeeeeeeeeeee#
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{./time.png}
+    \caption{Tempo de execução do programa para diferentes números de quantificadores}
+    \label{fig:time}
+\end{figure}
 
 \section{Conclusões}
 
