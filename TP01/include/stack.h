@@ -1,6 +1,7 @@
 #ifndef STACK_HPP
 #define STACK_HPP
 
+#include "memlog.h"
 #include <stdexcept> // std::underflow_error
 
 /**
@@ -14,6 +15,7 @@ private:
     T* elements;
     size_t max_size;
     size_t top_index;
+    int id;
 
 public:
 
@@ -22,8 +24,9 @@ public:
      * 
      * @param max_size Tamanho máximo da pilha
      */
-    Stack(size_t max_size) : max_size(max_size), top_index(0) {
+    Stack(size_t max_size, int id) : max_size(max_size), top_index(0), id(id) {
         elements = new T[max_size];
+        ESCREVEMEMLOG((long int)(elements), max_size * sizeof(T), id);
     }
 
     /**
@@ -42,6 +45,7 @@ public:
     void push(const T& value) {
         if (top_index < max_size) {
             elements[top_index++] = value;
+            ESCREVEMEMLOG((long int)(&elements[top_index - 1]), sizeof(T), id);
             return ;
         }
         // Stack overflow
@@ -68,6 +72,7 @@ public:
      */
     T top() const {
         if (top_index > 0) {
+            LEMEMLOG((long int)(&elements[top_index - 1]), sizeof(T), id);
             return elements[top_index - 1];
         }
         throw std::underflow_error("Stack is empty"); // Stack is empty

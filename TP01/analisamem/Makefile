@@ -30,12 +30,10 @@ use: $(EXE)
 	if test -d /tmp/out; then rm -rf /tmp/out; fi
 	mkdir /tmp/out
 	mkdir /tmp/out/teste
-	fixaddr/fixaddr.csh teste/multlog.out /tmp/out
-	$(EXE) -i /tmp/out/teste/multlog.out.fixed -p /tmp/out/mult
-	fixaddr/fixaddr.csh teste/somalog.out /tmp/out
-	$(EXE) -i /tmp/out/teste/somalog.out.fixed -p /tmp/out/soma
-	fixaddr/fixaddr.csh teste/transplog.out /tmp/out
-	$(EXE) -i /tmp/out/teste/transplog.out.fixed -p /tmp/out/transp
+	fixaddr/fixaddr.csh teste/registro_acesso_a.txt /tmp/out
+	$(EXE) -i /tmp/out/teste/registro_acesso_a.txt.fixed -p /tmp/out/registro_a
+	fixaddr/fixaddr.csh teste/registro_acesso_s.txt /tmp/out
+	$(EXE) -i /tmp/out/teste/registro_acesso_s.txt.fixed -p /tmp/out/registro_s
 	gnuplot /tmp/out/*.gp
 	ls /tmp/out/
 

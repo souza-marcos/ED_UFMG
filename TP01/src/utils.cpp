@@ -1,11 +1,17 @@
 #include "utils.h"
 #include "binary_tree.h"
 #include "stack.h"
+#include "memlog.h"
 
 #include <cstring>
 #include <string>
 
 #include <cassert>
+
+const int ID_STACK_FUN1 = 0; // InfixPostfix
+const int ID_STACK_FUN2 = 1; // EvaluateExpression
+const int ID_STACK_FUN3 = 2; // SatTree
+const int ID_TREE_FUN3 = 3; // SatTree
 
 const int MAX_SIZE_QUANTIFIERS = 10;
 const size_t MAX_SIZE_STACK  = 100;
@@ -26,7 +32,7 @@ int getPrecedence(char op) {
 std::string infixToPostfix(const char* infix) {
 
     // Pilha para armazenar os operadores e parenteses
-    Stack<char> stack = Stack<char>(MAX_SIZE_STACK);
+    Stack<char> stack = Stack<char>(MAX_SIZE_STACK, ID_STACK_FUN1);
 
     std::string postfix;
     
@@ -83,7 +89,7 @@ bool evaluateExpression(std::string exp, int arr[100]){
         Element(){}
     };
 
-    Stack<Element> stack(MAX_SIZE_STACK);
+    Stack<Element> stack(MAX_SIZE_STACK, ID_STACK_FUN2);
     while(i < exp.size()){
         Element aux;
 
@@ -155,7 +161,9 @@ std::string sat_tree(std::string postfix_exp, std::string vals){
     TreeNode<Element> *root = new TreeNode<Element>(Element{vals, qtd_quantifier});
     TreeNode<Element> *cur = root;
 
-    Stack<TreeNode<Element>*> stack(MAX_SIZE_STACK);
+    ESCREVEMEMLOG((long int)(root), sizeof(TreeNode<Element>), ID_TREE_FUN3);
+
+    Stack<TreeNode<Element>*> stack(MAX_SIZE_STACK, ID_STACK_FUN3);
 
     stack.push(root);
     while(!stack.isEmpty()){
@@ -186,6 +194,10 @@ std::string sat_tree(std::string postfix_exp, std::string vals){
 
                 cur->value.data = val_left;
 
+                LEMEMLOG((long int)(cur->left->value.data.c_str()), sizeof(char) * cur->left->value.data.size(), ID_TREE_FUN3);
+                LEMEMLOG((long int)(cur->right->value.data.c_str()), sizeof(char) * cur->right->value.data.size(), ID_TREE_FUN3);
+                ESCREVEMEMLOG((long int)(cur->value.data.c_str()), sizeof(char) * cur->value.data.size(), ID_TREE_FUN3);
+
                 // Faz a verificação até o quantificador anterior
                 for(int i = 0; i < cur->value.idx && idx_quantifier[i] != -1; i++){
                     int idx = idx_quantifier[i];
@@ -196,18 +208,31 @@ std::string sat_tree(std::string postfix_exp, std::string vals){
                         // *** 0 *** , *** 1 *** -> *** a ***
 
                         cur->value.data[idx] = (val_left[idx] == 'a'? val_right[idx]: val_left[idx]);
-
+                        ESCREVEMEMLOG((long int)&(cur->value.data) + idx, sizeof(char), ID_TREE_FUN3);
                     }
                 }
                 
                 cur->value.data[idx_quantifier[cur->left->value.idx]] = 'a';
+                ESCREVEMEMLOG((long int)&(cur->value.data) + idx_quantifier[cur->left->value.idx], sizeof(char), ID_TREE_FUN3);
+                LEMEMLOG((long int)(cur->left->value.idx), sizeof(int), ID_TREE_FUN3);
             }
             else if (left){ // left é o nó que possui o valor falso
                 cur->value.data = cur->left->value.data;
+                ESCREVEMEMLOG((long int)(cur->value.data.c_str()), sizeof(char) * cur->value.data.size(), ID_TREE_FUN3);
+                LEMEMLOG((long int)(cur->left->value.data.c_str()), sizeof(char) * cur->left->value.data.size(), ID_TREE_FUN3);
+
                 cur->value.data[idx_quantifier[cur->left->value.idx]] = '0';
+                LEMEMLOG((long int)(cur->left->value.idx), sizeof(int), ID_TREE_FUN3);
+                ESCREVEMEMLOG((long int)&(cur->value.data) + idx_quantifier[cur->left->value.idx], sizeof(char), ID_TREE_FUN3);
             }else if(right){ // right é o nó que possui o valor verdadeiro
                 cur->value.data = cur->right->value.data;
+                ESCREVEMEMLOG((long int)(cur->value.data.c_str()), sizeof(char) * cur->value.data.size(), ID_TREE_FUN3);
+                LEMEMLOG((long int)(cur->right->value.data.c_str()), sizeof(char) * cur->right->value.data.size(), ID_TREE_FUN3);
+
+
                 cur->value.data[idx_quantifier[cur->right->value.idx]] = '1';
+                LEMEMLOG((long int)(cur->right->value.idx), sizeof(int), ID_TREE_FUN3);
+                ESCREVEMEMLOG((long int)&(cur->value.data) + idx_quantifier[cur->left->value.idx], sizeof(char), ID_TREE_FUN3);
             }
 
             // Deletando os filhos 
@@ -224,9 +249,13 @@ std::string sat_tree(std::string postfix_exp, std::string vals){
         std::string copy = cur->value.data; copy[idx_quantifier[i]] = '0';
         TreeNode<Element> *left_node = new TreeNode<Element>(Element{copy, i}); 
         
+        ESCREVEMEMLOG((long int)(left_node), sizeof(TreeNode<Element>), ID_TREE_FUN3);
+
         copy[idx_quantifier[i]] = '1';
         TreeNode<Element> *right_node = new TreeNode<Element>(Element{copy, i});
         
+        ESCREVEMEMLOG((long int)(right_node), sizeof(TreeNode<Element>), ID_TREE_FUN3);
+
         BinaryTree<Element>::insertLeft(cur, left_node);
         BinaryTree<Element>::insertRight(cur, right_node);
 
