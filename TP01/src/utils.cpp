@@ -7,8 +7,8 @@
 
 #include <cassert>
 
-const int MAX_SIZE_QUANTIFIERS = 10;
-const size_t MAX_SIZE_STACK  = 100;
+const int MAX_SIZE_QUANTIFIERS = 30;
+const size_t MAX_SIZE_STACK  = 1000;
 
 int getPrecedence(char op) {
     switch (op) {
