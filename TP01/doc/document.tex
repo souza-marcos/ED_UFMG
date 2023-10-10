@@ -11,6 +11,7 @@
             ]{geometry}
 
 \usepackage{float}
+\usepackage{subcaption}
 
 \title{TP01 - Estrutura de dados}
 \author{Marcos Daniel Souza Netto - 2022069492} 
@@ -95,6 +96,8 @@ Como visto, a árvore possui $2^k$ folhas, e para cada uma delas, a função \te
 Já a complexidade de espaço é $O(k)$, pois a solução da árvore é realizada de modo ir o mais profundo na árvore possível, e cada vez que um nó é resolvido, seus filhos são removidos da memória.
 \section{Estratégias de robustez}
 
+A estratégia de robustez utilizada foi basicamente a verificação da entrada do usuário, ou seja a verificação na quantidade de argumentos e seus tipos.
+
 \section{Análise Experimental}
 
 A seguir serão apresentados os resultados obtidos na experimentação do programa.
@@ -103,11 +106,73 @@ A seguir serão apresentados os resultados obtidos na experimentação do progra
 
 Utilizando o programa analisamem, fornecido pelo professor, foi possível observar a localidade de referência do programa. Importante notar que aqui serão apresentadas imagens relacionadas a parte de satisfatibilidade do programa, afinal utiliza a parte de solucionador de equaações booleanas como subrotina.
 
+
+Ademais, foi utilizada a seguinte expressão para a parte de satisfatibilidade:
+
+\verb# ./bin/tp01 -s "0 | 1 & 2 & 3" e11e#
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{./images/sat_tree/registro_s-acesso-0.png}
-    \caption{any}
-    \label{fig:loc_ref_1}
+    \hfill
+    \begin{subfigure}[c]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{./images/sat_tree/registro_s-acesso-0.png}
+        \caption{Pilha da função infixToPostfix}
+        \label{fig:ac01}
+    \end{subfigure}%
+    \hfill
+    \begin{subfigure}[c]{0.4\linewidth}
+        
+        \centering
+        \includegraphics[width=\textwidth]{./images/sat_tree/registro_s-acesso-2.png}
+        \caption{Pilha da função sat\_tree}
+        \label{fig:ac02}
+    \end{subfigure}
+    \hfill
+    \caption{Acesso de Memória}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \hfill
+    \begin{subfigure}[c]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{./images/sat_tree/registro_s-distp-1.png}
+        \caption{Pilha da função evaluateExpression}
+        \label{fig:ac03}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{./images/sat_tree/registro_s-distp-2.png}
+        \caption{Pilha da função sat\_tree}
+        \label{fig:ac04}
+    \end{subfigure}
+    \hfill
+    \caption{Evolução de distância da pilha}
+\end{figure}
+
+Observa-se nessa Figura 3 (a) que ocorre um padrão em 4 partes, isso se deve porque a função \emph{evaluateExpression} é chamada uma vez para folha da árvore. 
+Outro detalhe sobre a Figura 3 (b) é a possibilidade de observar que o caminhamento na árvore é realizada semelhante a DFS(\emph{Depht First Search}), consonante com a implementação da função \emph{sat\_tree}.
+
+\begin{figure}[H]
+    \centering
+    \hfill
+    \begin{subfigure}[c]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{./images/sat_tree/registro_s-hist-1-1.png}
+        \caption{Pilha da função evaluateExpression}
+        \label{fig:ac05}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{./images/sat_tree/registro_s-hist-1-2.png}
+        \caption{Pilha da função sat\_tree}
+        \label{fig:ac06}
+    \end{subfigure}
+    \hfill
+    \caption{Distância da pilha}
 \end{figure}
 
 \subsection{Tempo de execução}
@@ -121,13 +186,21 @@ Teve como base o seguinte comando (Atente-se que estamos variando o número de q
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{./images/time.png}
+    \includegraphics[width=0.6\textwidth]{./images/time.png}
     \caption{Tempo de execução do programa para diferentes números de quantificadores}
     \label{fig:time}
 \end{figure}
 
+
+Observa-se, portanto, comportamento semelhando a ordem de complexidade descrita anteriormente ($O(2^k)$), onde $k$ é o número de quantificadores.
+
 \section{Conclusões}
 
+O trabalho proposto foi de grande valia para o aprendizado de estruturas de dados, e de como elas podem ser utilizadas para solucionar problemas, afinal foi de extrema importância a utilização de pilhas e árvores como estruturas principais.  
+
+Além disso, podemos observar que a análise de complexidade de grande importância, uma vez que ela nos permite prever o comportamento do programa para diferentes entradas, e assim, podemos realizar otimizações no código, como por exemplo, a utilização de uma estrutura de dados mais eficiente. Nesse trabalho, por exemplo, o problema de satisfatibilidade é um problema NP (determinístico não polinomial), ou seja, não existe uma solução conhecida em tempo polinomial, o que condiz com a solução implementada (de complexidade exponencial).
+
+Por fim, a análise do tempo de execução de forma experimental foi de fato interessante pois permitiu conferir a similaridade com a teoria e o mundo real.
 \section*{Bibliografia}
 
 Slides da disciplina de Estrutura de Dados, ministrada pelo Prof. Wagner Meira Jr. e Prof. Eder Fereira Figuiredo.
