@@ -1,78 +1,104 @@
 #include "utils.h"
 #include "binary_tree.h"
 #include "stack.h"
+#include "vector.h"
 
 #include <cstring>
 #include <string>
+#include <sstream>
 
 #include <cassert>
 
-const int MAX_SIZE_QUANTIFIERS = 30;
-const size_t MAX_SIZE_STACK  = 1000;
+#define ANDOP -1
+#define OROP -2
+#define NOTOP -3
+#define LPAR -4
+#define RPAR -5
 
-int getPrecedence(char op) {
+const int MAX_SIZE_QUANTIFIERS = 30;
+const size_t MAX_SIZE_STACK    = 1e6;
+const size_t MAX_SIZE_EXP      = 1e6;
+
+int getPrecedence(int op) {
     switch (op) {
-        case '|':
+        case OROP:
             return 1;
-        case '&':
+        case ANDOP:
             return 2;
-        case '~':
+        case NOTOP:
             return 3;
         default:
             return 0;
     }
 }
 
-std::string infixToPostfix(const char* infix) {
+int operatorToInt(std::string op) {
+    switch (op[0]) {
+        case '|':
+            return OROP;
+        case '&':
+            return ANDOP;
+        case '~':
+            return NOTOP;
+        case '(':
+            return LPAR;
+        case ')':
+            return RPAR;
+        default:
+            return std::stoi(op);
+    }
+}
+
+Vector<int> infixToPostfix(const char* infix) {
+    std::stringstream ss(infix);
+    Vector<int> postfix(MAX_SIZE_EXP);
 
     // Pilha para armazenar os operadores e parenteses
-    Stack<char> stack = Stack<char>(MAX_SIZE_STACK);
+    Stack<int> stack = Stack<int>(MAX_SIZE_STACK);
 
-    std::string postfix;
+    std::string word;
     
     // Percorrendo a expressão infixa
-    for (int cont = 0; infix[cont] != '\0'; cont++) {
-        if (infix[cont] == ' ') continue; 
-        
-        char c = infix[cont];
+    while(ss >> word) {
+        int op = operatorToInt(word);
 
-        if(c == '|' || c == '&' || c == '~'){
+        if(op == OROP || op == ANDOP || op == NOTOP){
             // Se for um operador, verifica se eh necessario resgatar valores da pilha
-            while (!stack.isEmpty() && getPrecedence(c) < getPrecedence(stack.top())) {
-                postfix += stack.top();
+            while (!stack.isEmpty() && getPrecedence(op) < getPrecedence(stack.top())) {
+                postfix.push_back(stack.top());
                 stack.pop();
             }
 
-            stack.push(c);
+            stack.push(op);
         }
-        else if(c == '('){
-            stack.push(c);
+        else if(op == LPAR){
+            stack.push(op);
         }
-        else if(c == ')'){
+        else if(op == RPAR){
             // Resgata a expressão entre parenteses
-            while (stack.top() != '(') {
-                postfix += stack.top();
+            while (stack.top() != LPAR) {
+                postfix.push_back(stack.top());
                 stack.pop();
             }
-            if (stack.top() == '(') stack.pop();
+            if (stack.top() == LPAR) stack.pop();
         }
         else{
             // Se for uma variavel, ja a adiciona na pilha
-            postfix += c;
+            postfix.push_back(op);
         }
 
     }
     
     // Resgata o restante dos operadores
     while (!stack.isEmpty()) {
-        postfix += stack.top();
+        postfix.push_back(stack.top());
         stack.pop();
     }
     
     return postfix;
 }
 
-bool evaluateExpression(std::string exp, int arr[100]){
+bool evaluateExpression(Vector<int> exp, int arr[100]){
     size_t i = 0;
 
     // Struct para armazenar os dados de cada elemento da pilha
@@ -84,16 +110,16 @@ bool evaluateExpression(std::string exp, int arr[100]){
     };
 
     Stack<Element> stack(MAX_SIZE_STACK);
-    while(i < exp.size()){
+    while(i < exp.getSize()){
         Element aux;
 
-        if(exp[i] == '~'){ // Resolve o topo da pilha -> Inverte ele
+        if(exp[i] == NOTOP){ // Resolve o topo da pilha -> Inverte ele
             aux = stack.top(); 
             int val = (aux.isresolved ? aux.el : arr[aux.el]); 
             stack.pop();
             stack.push(Element{true, !val});
         }
-        else if(exp[i] == '|' || exp[i] == '&'){ // Resolve os dois nós do top da pilha -> empilha o resultado 
+        else if(exp[i] == OROP || exp[i] == ANDOP){ // Resolve os dois nós do top da pilha -> empilha o resultado 
 
             aux = stack.top();
             int val1 = (aux.isresolved ? aux.el : arr[aux.el]); 
@@ -103,13 +129,19 @@ bool evaluateExpression(std::string exp, int arr[100]){
             int val2 = (aux.isresolved ? aux.el : arr[aux.el]); 
             stack.pop();
             
-            int res = (exp[i] == '|'? (val1 || val2): (val1 && val2));
+            int res = (exp[i] == OROP? (val1 || val2): (val1 && val2));
 
             stack.push(Element{true, res});
         }
         else {
-            stack.push(Element{false, exp[i] - '0'});
+            stack.push(Element{false, exp[i]});
         }
+
+        // LOG
+        // if(exp[i] == "~" || exp[i] == "&" || exp[i] == "|"){
+        //     std::cout << stack.top().el << " "; 
+        // }
+
         i++;
     }
     Element aux = stack.top(); 
@@ -117,7 +149,7 @@ bool evaluateExpression(std::string exp, int arr[100]){
     return (aux.isresolved?aux.el:arr[aux.el]);
 }
 
-bool evaluateExpression(std::string exp, std::string vals){
+bool evaluateExpression(Vector<int> exp, std::string vals){
 
     // Transformar a string de valores em um array de inteiros
     int arr[100];
@@ -125,7 +157,7 @@ bool evaluateExpression(std::string exp, std::string vals){
     return evaluateExpression(exp, arr);
 }
 
-std::string sat_tree(std::string postfix_exp, std::string vals){
+std::string sat_tree(Vector<int> postfix_exp, std::string vals){
 
     // Lista dos indices dos quantificadores
     int idx_quantifier[MAX_SIZE_QUANTIFIERS]; 

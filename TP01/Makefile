@@ -6,10 +6,10 @@ INC = include
 BIN = bin
 # Oldest $(OBJ)/stack.o 
 OBJS = $(OBJ)/utils.o $(OBJ)/main.o 
-HDRS =  $(INC)/stack.h $(INC)/binary_tree.h $(INC)/utils.h
+HDRS =  $(INC)/stack.h $(INC)/binary_tree.h $(INC)/utils.h $(INC)/vector.h
 CFLAGS = -g -std=c++17 -Wall -c -I$(INC)
 
-EXE = $(BIN)/tp01
+EXE = $(BIN)/tp1.out
 
 all: $(EXE)
 

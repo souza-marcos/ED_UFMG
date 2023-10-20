@@ -24,9 +24,11 @@ int main(int argc, char *argv[]){
     for(int i = 0; infix[i] != '\0'; i++)
         if(infix[i] == '\"') infix[i] = ' ';
 
-    std::string postfix = infixToPostfix(infix);
+    Vector<int> postfix = infixToPostfix(infix);
 
-    cout << postfix << endl;
+    // for(size_t i = 0; i < postfix.getSize(); i++)
+    //     cout << postfix[i] << " ";
+    // cout << endl;
 
     string vals = argv[3];
 
