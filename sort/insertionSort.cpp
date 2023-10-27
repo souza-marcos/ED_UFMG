@@ -24,7 +24,7 @@
 
 
 template <typename T>
-void insection_sort(std::vector<T> &arr){
+void insertion_sort(std::vector<T> &arr){
     int size = arr.size();
 
     for(int i = 0; i < size; i++){
@@ -41,7 +41,7 @@ void insection_sort(std::vector<T> &arr){
 int main(){
 
     std::vector<int> arr = {8, 5, 10, 2, 3, 1, 6};
-    insection_sort(arr);
+    insertion_sort(arr);
 
     for(auto el : arr) std::cout << el << " "; 
     std::cout << std::endl;
