@@ -3,32 +3,56 @@
 #include <algorithm>
 #include <set>
 
+
 using namespace std;
+using std::cout;
 
-bool verify_greedy(vector<vector<int>> g,vector<pair<int, int>> colors){
-    // Verifying the color graph is greedy
+/*
+    IDEIA: Os vertices adjacentes sao organizados em um heap
+    De toda forma temos que ordenar para uma busca eficiente
+*/
 
-    for(auto w: g) {
-        for(auto el: w) cout << el << " "; 
-        cout << endl;
-    }
+bool verify_greedy(vector<vector<int>> g, vector<pair<int, int>> colors){
+    
+    // sort(colors.begin(), colors.end());
+    
+    // Percorrer cada 
 
-    set<int> colors_used;
-    for(int i = 0; i < g.size(); i++){ // 
+
+    for(size_t i = 0; i < g.size(); i ++){
+        vector<int> w = g[i];
+
         
-        // Iterate the neigh and add to a set
-        colors_used.clear();
-        for(auto it: g[i]) colors_used.insert(colors[it].first);
-        
-        cout << colors_used.size() << endl; 
-        if(colors_used.size() < colors[i].first -1) return false;
+        // Ordenacao pela cor nos vertices adjacentes
+        std::sort(w.begin(), w.end(), [colors](const int &el1, const int &el2){
+            if(colors[el1].first == colors[el2].second)
+                return colors[el1].second < colors[el2].second;
+            return colors[el1].first < colors[el2].second;
+        });
 
-        auto it = colors_used.begin();
-        for(int j = 1; j < colors[i].first; j++){
-            if((*it) != j) return false;
+        // TODO:
+        // Verificacao se nao temos 'buracos' entre menor cor ate cor do representante
+
+        int cont = 1; // 1 1 2 3 3 5 ->(cont)=> 2 2 3 4 4 
+        for(size_t j = 0; j < w.size(); j++){
+            if(colors[w[j]].first >= colors[i].first -1) {
+                break;
+            }
+            if(cont + 1 < colors[w[j]].first) return false; // Temos um buraco -> ex: 4 [5] 6, cont = 4 => 4 + 1 < 6 OK
+            if(cont + 1 == colors[w[j]].first) cont ++; // else
         }
+
+        // BUG: NAO TA ATUALIZANDO CONT
+        // Caso nao tenha, verificamos se a cor do representante eh 1 a mais do que a maior cor presente
+        if(colors[i].first > cont + 1){
+            // LOG
+            cout << i << " - " << colors[i].first << " " << cont << endl;
+            cout << "OUTRO" << endl;
+            return false;
+        } 
     }
-    return true;
+
+    return true;    
 }
 
 
@@ -56,9 +80,9 @@ int main(){
         cout << "0" << endl; 
         return 0;
     }
-    cout << "1 ";
 
-    sort(colors.begin(), colors.end());
+    cout << "1 ";
+    std::sort(colors.begin(), colors.end());
     for(auto el: colors) 
         cout << el.second << " "; 
         
