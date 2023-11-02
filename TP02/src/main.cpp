@@ -9,6 +9,14 @@
 using namespace std;
 using std::cout;
 
+/**
+ * @brief Verifica se o grafo esta colorido gulosamente
+ * 
+ * @param g O grafo
+ * @param colors O vetor de cores 
+ * @return true Colorido gulosamente
+ * @return false Não colorido gulosamente
+ */
 bool verify_greedy(Graph& g, Vector<Pair<int,int>> &colors){
 
     for(size_t i = 0; i < g.vertices.getSize(); i ++){

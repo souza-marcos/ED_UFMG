@@ -67,7 +67,7 @@ TEST_CASE("Merge Sort"){
     }
     std::cout << std::endl;
 }
-/*
+
 TEST_CASE("Quick Sort"){
 
     Vector<Pair<int, int>> v;
@@ -79,7 +79,7 @@ TEST_CASE("Quick Sort"){
         std::cout << v[i].first << " " << v[i].second << "\n"; 
     }
     std::cout << std::endl;
-}*/
+}
 
 TEST_CASE("Heap Sort"){
 

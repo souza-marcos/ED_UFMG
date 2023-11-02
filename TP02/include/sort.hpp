@@ -80,32 +80,35 @@ void selection_sort(Vector<T> &arr){
     }
 };
 
-/*
+// Quick Sort - central pivot
+void partition(Vector<Pair<int,int>> &arr, int left, int right, int& i, int& j){
+    Pair<int, int> pivot = arr[(left + right) / 2];
+    i = left; j = right;
 
-// Quick Sort
-template <typename T>
-int partition(Vector<T> &arr, int left, int right){
-    int pivot = arr[right];
-    int i = left - 1;
+    do{
+        while(arr[i] < pivot) i ++;
+        while(arr[j] > pivot) j --;
 
-    for(int j = left; j < right; j++){
-        if(arr[j] < pivot){
-            i ++;
-            swap(arr[i], arr[j]);
+        if(i <= j) {
+            // Swap them
+            Pair<int,int> aux = arr[i];
+            arr[i] = arr[j];
+            arr[j] = aux;
+
+            i ++, j --;
         }
-    }
-    swap(arr[i + 1], arr[right]);
-    return i + 1;
+    }while(i <= j);
 }
 
 template <typename T>
 void quick_sort(Vector<T> &arr, int left, int right){
     if(left < right){
-        int pivot = partition(arr, left, right);
-        quick_sort(arr, left, pivot - 1);
-        quick_sort(arr, pivot + 1, right);
+        int i, j;
+        partition(arr, left, right, i, j);
+        if(left < j) quick_sort(arr, left, j);
+        if(right > i) quick_sort(arr, i, right);
     }
-}*/
+}
 
 // Merge Sort
 template <typename T>
