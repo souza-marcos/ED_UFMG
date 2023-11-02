@@ -2,6 +2,8 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
+#include <cstddef> // size_t
+
 /**
  * @brief Classe que representa um vetor dinâmico
  * 
@@ -152,7 +154,7 @@ public:
             arr = new T[v.capacity];
             size = v.size;
             capacity = v.capacity;
-            for (int i = 0; i < size; i++)
+            for (size_t i = 0; i < size; i++)
             {
                 arr[i] = v.arr[i];
             }

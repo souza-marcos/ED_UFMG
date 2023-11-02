@@ -1,16 +1,20 @@
-#include <vector.hpp>
+#include "vector.hpp"
 
 class Vertex{
 public:
-    int index, color;
+    int index;
     Vector<int> adjacent;
-    int size; 
 
-    Vertex(int index, int size, int color){
+    // Pode ocasionar um erro aqui
+    Vertex()
+    {
+        index = 0;
+        adjacent = Vector<int>(1);
+    }
+
+    Vertex(int index, int size){
         this->index = index;
-        this->size = size;
         adjacent = Vector<int>(size);
-        this->color = -1;
     }
     
 };
@@ -19,4 +23,9 @@ class Graph{
 
 public:
     Vector<Vertex> vertices;
+
+    Graph(int size){
+        vertices = Vector<Vertex>(size);
+    }
+
 };

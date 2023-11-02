@@ -4,18 +4,29 @@ SRC = src
 OBJ = obj
 INC = include
 BIN = bin
-# Oldest $(OBJ)/stack.o 
 OBJS = $(OBJ)/main.o 
-HDRS = $(INC)/vector.hpp
+HDRS = $(INC)/vector.hpp $(INC)/set.hpp $(INC)/pair.hpp $(INC)/graph.hpp
 CFLAGS = -g -std=c++17 -Wall -c -I$(INC)
 
 EXE = $(BIN)/tp2.out
+TEST = $(BIN)/test.out
 
 all: $(EXE)
+
+test: $(TEST)
+	$(TEST) <input.txt
 	
 
 $(EXE): $(OBJS)
 	$(CC) -g -std=c++11 -o $(EXE) $(OBJS) $(LIBS)
 
+$(TEST): $(OBJ)/test.o
+	$(CC) -g -std=c++11 -o $(TEST) $(OBJ)/test.o $(LIBS)
+
 $(OBJ)/main.o: $(HDRS) $(SRC)/main.cpp
 	$(CC) $(CFLAGS) -o $(OBJ)/main.o $(SRC)/main.cpp
+
+$(OBJ)/test.o: $(HDRS) test/test_sort.cpp
+	$(CC) $(CFLAGS) -o $(OBJ)/test.o test/test_sort.cpp
+
+

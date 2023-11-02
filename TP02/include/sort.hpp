@@ -1,4 +1,14 @@
+#ifndef SORT_HPP
+#define SORT_HPP
+
 #include "vector.hpp"
+
+template <typename T>
+void swap(T &a, T &b){
+    T aux = a;
+    a = b;
+    b = aux;
+}
 
 /**
  * Estabilidade                 Sim 
@@ -9,11 +19,11 @@
  */
 template <typename T>
 void bubble_sort(Vector<T> &arr){
-    int size = arr.size();
+    int size = arr.getSize();
 
     for(int i = 0; i < size; i++){
         for(int j = 0; j + i < size - 1; j++){
-            if(arr[j] > arr[j + 1]) std::swap(arr[j], arr[j + 1]);
+            if(arr[j] > arr[j + 1]) swap(arr[j], arr[j + 1]);
         }
     }
 };
@@ -27,7 +37,7 @@ void bubble_sort(Vector<T> &arr){
  */
 template <typename T>
 void insertion_sort(Vector<T> &arr){
-    int size = arr.size();
+    int size = arr.getSize();
 
     for(int i = 0; i < size; i++){
         T element = arr[i];
@@ -50,14 +60,14 @@ void insertion_sort(Vector<T> &arr){
  */
 template <typename T>
 void selection_sort(Vector<T> &arr){
-    int size = arr.size();
+    int size = arr.getSize();
 
     for(int i = 0; i < size; i++){
         int min = i;
         for(int j = i + 1; j < size; j++) 
             if(arr[min] > arr[j]) min = j;    
         
-        if(i != min) std::swap(arr[i], arr[min]);
+        if(i != min) swap(arr[i], arr[min]);
     }
 };
 
@@ -71,10 +81,10 @@ int partition(Vector<T> &arr, int left, int right){
     for(int j = left; j < right; j++){
         if(arr[j] < pivot){
             i ++;
-            std::swap(arr[i], arr[j]);
+            swap(arr[i], arr[j]);
         }
     }
-    std::swap(arr[i + 1], arr[right]);
+    swap(arr[i + 1], arr[right]);
     return i + 1;
 }
 
@@ -145,21 +155,23 @@ void heapify(Vector<T> &arr, int size, int i){
     if(right < size && arr[right] > arr[largest]) largest = right;
 
     if(largest != i){
-        std::swap(arr[i], arr[largest]);
+        swap(arr[i], arr[largest]);
         heapify(arr, size, largest);
     }
 }
 
 template <typename T>
 void heap_sort(Vector<T> &arr){
-    int size = arr.size();
+    int size = arr.getSize();
 
     for(int i = size / 2 - 1; i >= 0; i--) heapify(arr, size, i);
 
     for(int i = size - 1; i >= 0; i--){
-        std::swap(arr[0], arr[i]);
+        swap(arr[0], arr[i]);
         heapify(arr, i, 0);
     }
 }
 
 // Falta função propria de ordenamento
+
+#endif
