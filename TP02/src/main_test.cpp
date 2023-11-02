@@ -30,23 +30,32 @@ bool verify_greedy(vector<vector<int>> g, vector<pair<int, int>> colors){
             return colors[el1].first < colors[el2].second;
         });
 
+        // for(auto el: w) cout << el << " ";
+        // cout << endl;
         // TODO:
         // Verificacao se nao temos 'buracos' entre menor cor ate cor do representante
 
         int cont = 1; // 1 1 2 3 3 5 ->(cont)=> 2 2 3 4 4 
-        for(size_t j = 0; j < w.size(); j++){
+        size_t j = 0;
+        for(; j < w.size(); j++){
             if(colors[w[j]].first >= colors[i].first -1) {
                 break;
             }
-            if(cont + 1 < colors[w[j]].first) return false; // Temos um buraco -> ex: 4 [5] 6, cont = 4 => 4 + 1 < 6 OK
-            if(cont + 1 == colors[w[j]].first) cont ++; // else
+            if(cont < colors[w[j]].first) return false; // Temos um buraco -> ex: 4 [5] 6, cont = 4 => 4 + 1 < 6 OK
+            if(cont == colors[w[j]].first) cont ++; // else
         }
 
         // BUG: NAO TA ATUALIZANDO CONT
         // Caso nao tenha, verificamos se a cor do representante eh 1 a mais do que a maior cor presente
-        if(colors[i].first > cont + 1){
+        
+        // if(j == w.size()) {cout << "CHEGOU NO FINAL" << endl;}
+        
+
+        cout << "CONT: " << cont << ", " << w[i] << " " << colors[w[i]].first << " - " << w[j] << " " << colors[w[j]].first << endl;
+        
+
+        if(colors[w[j]].first + 1 < colors[w[i]].first){
             // LOG
-            cout << i << " - " << colors[i].first << " " << cont << endl;
             cout << "OUTRO" << endl;
             return false;
         } 
