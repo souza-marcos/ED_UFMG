@@ -9,58 +9,27 @@
 using namespace std;
 using std::cout;
 
-/*
-bool verify_greedy(vector<vector<int>> g, vector<pair<int, int>> colors){
-    
-    // sort(colors.begin(), colors.end());
-    
-    // Percorrer cada 
+bool verify_greedy(Graph& g, Vector<Pair<int,int>> &colors){
 
+    for(size_t i = 0; i < g.vertices.getSize(); i ++){
+        auto v_adj = g.vertices[i].adjacent;
 
-    for(size_t i = 0; i < g.size(); i ++){
-        vector<int> w = g[i];
-
+        if(v_adj.getSize() <= 1) continue;
         
-        // Ordenacao pela cor nos vertices adjacentes
-        std::sort(w.begin(), w.end(), [colors](const int &el1, const int &el2){
-            if(colors[el1].first == colors[el2].second)
-                return colors[el1].second < colors[el2].second;
-            return colors[el1].first < colors[el2].second;
-        });
+        Set<int> set;
 
-        // for(auto el: w) cout << el << " ";
-        // cout << endl;
-        // TODO:
-        // Verificacao se nao temos 'buracos' entre menor cor ate cor do representante
-
-        int cont = 1; // 1 1 2 3 3 5 ->(cont)=> 2 2 3 4 4 
-        size_t j = 0;
-        for(; j < w.size(); j++){
-            if(colors[w[j]].first >= colors[i].first -1) {
-                break;
+        // Inserindo em um conjunto
+        for(size_t j = 0; j < v_adj.getSize(); j ++) {
+            if(colors[v_adj[j]].first < colors[i].first){
+                set.insert(colors[v_adj[j]].first);
             }
-            if(cont < colors[w[j]].first) return false; // Temos um buraco -> ex: 4 [5] 6, cont = 4 => 4 + 1 < 6 OK
-            if(cont == colors[w[j]].first) cont ++; // else
         }
 
-        // BUG: NAO TA ATUALIZANDO CONT
-        // Caso nao tenha, verificamos se a cor do representante eh 1 a mais do que a maior cor presente
-        
-        // if(j == w.size()) {cout << "CHEGOU NO FINAL" << endl;}
-        
-
-        cout << "CONT: " << cont << ", " << w[i] << " " << colors[w[i]].first << " - " << w[j] << " " << colors[w[j]].first << endl;
-        
-
-        if(colors[w[j]].first + 1 < colors[w[i]].first){
-            // LOG
-            cout << "OUTRO" << endl;
-            return false;
-        } 
+        // Para nao ter 'buracos', o tamanho do conjunto deve ser igual ao valor da cor -1
+        if((int)set.getSize() != colors[i].first - 1) return false;
     }
-
     return true;    
-}*/
+}
 
 /**
  * @brief Escolhe o metodo de ordenacao com base no caractere escolhido e chama a funcao
@@ -89,7 +58,8 @@ void sort(char method, Vector<Pair<int,int>>& colors){
         break;
 
     case 'q':
-        quick_sort(colors, 0, colors.getSize() - 1);
+        cout << "NOT WORKING YET\n"; exit(-1);
+        // quick_sort(colors, 0, colors.getSize() - 1);
         break;
     
     case 'h':
@@ -102,12 +72,6 @@ void sort(char method, Vector<Pair<int,int>>& colors){
     }
 
 }
-
-bool operator<(const Pair<int, int> &a, const Pair<int, int> &b){
-    // Color, Index
-    if(a.first == b.first) return a.second < b.second;
-    return a.first < b.first;
-};
 
 int main(){
     char method; cin >> method;
@@ -138,23 +102,30 @@ int main(){
 
 
     // Printing graph
-    for(int i = 0; i < n_vert; i ++){
+    /*for(int i = 0; i < n_vert; i ++){
         cout << g.vertices[i].index << " - ";
         for(size_t j = 0; j < g.vertices[i].adjacent.getSize(); j ++){
             cout << g.vertices[i].adjacent[j] << " ";
         }
         cout << endl;
+    }*/
+
+    // print_array(colors);
+
+
+    // print_array(colors);
+
+    if(!verify_greedy(g, colors)){
+        cout << "0" << endl; 
+        return 0;
     }
 
-    
-
     sort(method, colors);
-
-    cout << " AQUI" << endl;
-    // if(!verify_greedy(g, colors)){
-    //     cout << "0" << endl; 
-    //     return 0;
-    // }
+    cout << "1" << endl;
+    for(int i = 0; i < n_vert; i ++)
+        cout << colors[i].second << " ";
+    
+    cout << endl;
 
     return 0;
 }

@@ -43,12 +43,12 @@ public:
     /**
      * @brief Constrói um novo objeto Vector
      * 
-     * @param capacity Capacidade inicial do vetor
+     * @param size Tamanho inicial do vetor
      */
-    Vector(int capacity)
+    Vector(int size)
     {
-        arr = new T[capacity];
-        size = 0;
+        arr = new T[2 * size];
+        this->size = size;
         this->capacity = capacity;
     }
 

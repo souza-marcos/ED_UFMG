@@ -29,4 +29,11 @@ bool operator>(const Pair<int, int> &a, const Pair<int, int> &b){
 };
 
 
+// Look here - I'm not sure if this is correct
+bool operator<=(const Pair<int, int> &a, const Pair<int, int> &b){
+    // Color, Index
+    if(a.first == b.first) return a.second <= b.second;
+    return a.first < b.first;
+};
+
 #endif

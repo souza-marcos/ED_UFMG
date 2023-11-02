@@ -1,13 +1,22 @@
 #ifndef SORT_HPP
 #define SORT_HPP
 
+#include <iostream>
 #include "vector.hpp"
+#include "pair.hpp"
 
 template <typename T>
 void swap(T &a, T &b){
     T aux = a;
     a = b;
     b = aux;
+}
+
+void print_array(Vector<Pair<int,int>>& arr){
+    for(size_t i = 0; i < arr.getSize(); i ++){
+        std::cout << arr[i].first << " " << arr[i].second << "; ";
+    }
+    std::cout << std::endl;
 }
 
 /**
@@ -71,6 +80,7 @@ void selection_sort(Vector<T> &arr){
     }
 };
 
+/*
 
 // Quick Sort
 template <typename T>
@@ -95,7 +105,7 @@ void quick_sort(Vector<T> &arr, int left, int right){
         quick_sort(arr, left, pivot - 1);
         quick_sort(arr, pivot + 1, right);
     }
-}
+}*/
 
 // Merge Sort
 template <typename T>
