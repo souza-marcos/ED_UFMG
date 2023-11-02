@@ -49,7 +49,7 @@ public:
     {
         arr = new T[2 * size];
         this->size = size;
-        this->capacity = capacity;
+        this->capacity = 2 * size;
     }
 
     /**

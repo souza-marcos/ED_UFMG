@@ -12,9 +12,9 @@ using std::cout;
 bool verify_greedy(Graph& g, Vector<Pair<int,int>> &colors){
 
     for(size_t i = 0; i < g.vertices.getSize(); i ++){
-        auto v_adj = g.vertices[i].adjacent;
+        auto& v_adj = g.vertices[i].adjacent;
 
-        if(v_adj.getSize() <= 1) continue;
+        if(colors[i].first == 1) continue;
         
         Set<int> set;
 
@@ -62,7 +62,7 @@ void sort(char method, Vector<Pair<int,int>>& colors){
         // quick_sort(colors, 0, colors.getSize() - 1);
         break;
     
-    case 'h':
+    case 'p':
         heap_sort(colors);
         break;
 
@@ -121,7 +121,7 @@ int main(){
     }
 
     sort(method, colors);
-    cout << "1" << endl;
+    cout << "1 ";
     for(int i = 0; i < n_vert; i ++)
         cout << colors[i].second << " ";
     
