@@ -66,8 +66,7 @@ void sort(char method, Vector<Pair<int,int>>& colors){
         break;
 
     case 'q':
-        cout << "NOT WORKING YET\n"; exit(-1);
-        // quick_sort(colors, 0, colors.getSize() - 1);
+        quick_sort(colors, 0, colors.getSize() - 1);
         break;
     
     case 'p':
