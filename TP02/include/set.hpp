@@ -3,8 +3,12 @@
 
 #include <cstddef> // size_t
 #include <iostream>
-#include "stack.hpp"
 
+/**
+ * @brief Struct que representa um no da arvore binaria de busca
+ * 
+ * @tparam T Tipo do valor armazenado no no
+ */
 template <typename T>
 struct Node
 {
@@ -19,96 +23,18 @@ struct Node
         right = nullptr;
         parent = nullptr;
     }
-
-    // ~Node<T>()
-    // {
-    //     delete left;
-    //     delete right;
-    // }
 };
 
-
-template <typename T>
-class SetIterator
-{
-public:
-    using ValueType = T;
-
-
-public:
-
-    SetIterator(Node<ValueType>* ptr): m_Ptr(ptr) {
-        // Adiciona todos os nos da arvore a esquerda do no atual na pilha
-        while(m_Ptr != nullptr){
-            stack.push(m_Ptr);
-            m_Ptr = m_Ptr->left; // Vai para o menor indice
-        }
-    }
-
-    bool operator!=(const SetIterator& other) const
-    {
-        return m_Ptr != other.m_Ptr;
-    }
-
-    bool operator==(const SetIterator& other) const
-    {
-        return m_Ptr == other.m_Ptr;
-    }
-
-    const ValueType& operator*() const
-    {
-        return *(m_Ptr);
-    }
-
-    SetIterator& operator++()
-    {
-
-        // if(m_Ptr == nullptr) return;
-        // while(!stack.isEmpty() || m_Ptr != nullptr){
-        //     if(cur != nullptr){
-        //         stack.push(cur);
-        //         cur = cur->left;
-        //     }else{
-        //         cur = stack.top(); stack.pop();
-        //         print(cur->value);
-        //         cur = cur->right;
-        //     }
-        // }   
-
-        if(stack.isEmpty()) {
-            m_Ptr = nullptr; 
-            return *this;
-        }
-
-        // Vai para o no pai
-        m_Ptr = stack.top(); stack.pop();
-
-        // Vai para o no a direita do pai e adiciona todos os nos a esquerda
-        Node<ValueType>* aux = m_Ptr->right;
-        while(aux != nullptr){
-            stack.push(aux);
-            aux = aux->left;
-            std::cout << "aux: "<< aux->value << "\n";
-        }
-        m_Ptr = stack.top(); stack.pop();
-        std::cout << "m_Ptr: "<< m_Ptr->value << "\n";
-        return *this;
-    }
-
-private:
-    Node<ValueType> *m_Ptr;             // Ponteiro para o no atual
-    Stack<Node<ValueType>*> stack; // Pilha para percorrer a arvore
-};
-
-
+/**
+ * @brief Classe que representa um conjunto (set) implementado com arvore binaria de busca
+ * 
+ * @tparam T Tipo do valor armazenado no conjunto
+ */
 template <typename T>
 class Set
 {
 public:
-    using ValueType = T;
-    using Iterator = SetIterator<Set<T>>;
     friend class Node<T>;
-    friend class SetIterator<Set<T>>;
 
 private:
     Node<T> *root;
@@ -152,6 +78,12 @@ private:
         // Caso seja Igual nao inserimos o valor na arvore
     }
 
+    /**
+     * @brief Percorre a arvore em ordem
+     * 
+     * @param node No da raiz da arvore
+     * @param callback Funcao que sera chamada para cada no
+     */
     void walk(Node<T> *node, void (*callback)(T))
     {
         if (node != nullptr)
@@ -161,7 +93,6 @@ private:
             walk(node->right, callback);
         }
     }
-
 
     /**
      * @brief Limpa a subarvore
@@ -265,13 +196,21 @@ private:
     
 
 public:
-    
+
+    /**
+     * @brief Construtor padrão da classe Set
+     * 
+     */    
     Set()
     {
         root = nullptr;
         size = 0;
     }
 
+    /**
+     * @brief Destrutor da classe Set
+     * 
+     */
     ~Set()
     {
         clear(root);
@@ -351,7 +290,7 @@ public:
     }
 
     /**
-     * @brief Clear the set
+     * @brief Limpa todo o conjunto
      * 
      */
     void clear()
@@ -360,15 +299,6 @@ public:
         root = nullptr;
         size = 0;
     }
-
-    Iterator begin(){
-        return Iterator(this->root);
-    }
-
-    Iterator end(){
-        return Iterator(nullptr);
-    }
-
 };
 
 #endif

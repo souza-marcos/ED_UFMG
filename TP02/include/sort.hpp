@@ -6,18 +6,16 @@
 #include "pair.hpp"
 #include "set.hpp"
 
+/**
+ * @brief Função auxiliar para trocar dois elementos de lugar
+ * 
+ * @tparam T Tipo dos elementos
+ */
 template <typename T>
 void swap(T &a, T &b){
     T aux = a;
     a = b;
     b = aux;
-}
-
-void print_array(Vector<Pair<int,int>>& arr){
-    for(size_t i = 0; i < arr.getSize(); i ++){
-        std::cout << arr[i].first << " " << arr[i].second << "; ";
-    }
-    std::cout << std::endl;
 }
 
 /**
@@ -81,7 +79,7 @@ void selection_sort(Vector<T> &arr){
     }
 };
 
-// Quick Sort - central pivot
+// Quick Sort - Implementacao com pivo central
 void partition(Vector<Pair<int,int>> &arr, int left, int right, int& i, int& j){
     Pair<int, int> pivot = arr[(left + right) / 2];
     i = left; j = right;
@@ -101,6 +99,13 @@ void partition(Vector<Pair<int,int>> &arr, int left, int right, int& i, int& j){
     }while(i <= j);
 }
 
+/**
+ * 
+ * Estabilidade                 Nao
+ * Adaptavel                    Nao
+ * Complexidade de Comparacoes  O(n log n) - Melhor Caso. O(n^2) - Pior Caso.
+ * 
+ */
 template <typename T>
 void quick_sort(Vector<T> &arr, int left, int right){
     if(left < right){
@@ -148,6 +153,15 @@ void merge(Vector<T> &arr, int left, int middle, int right){
     }
 }
 
+/**
+ * 
+ * Estabilidade                 Sim
+ * Adaptavel                    Não
+ * Complexidade de Comparacoes  O(n log n)
+ * 
+ * Complexidade de Espaço       O(n)
+ * 
+ */
 template <typename T>
 void merge_sort(Vector<T> &arr, int left, int right){
     if(left < right){
@@ -174,6 +188,13 @@ void heapify(Vector<T> &arr, int size, int i){
     }
 }
 
+/**
+ * 
+ * Estabilidade                 Nao
+ * Adaptavel                    Nao
+ * Complexidade de Comparacoes  O(n log n) - Independente do caso
+ * 
+ */
 template <typename T>
 void heap_sort(Vector<T> &arr){
     int size = arr.getSize();
@@ -186,8 +207,13 @@ void heap_sort(Vector<T> &arr){
     }
 }
 
-// Falta função propria de ordenamento
-// Para cada cor contruimos um set e vamos percorrendo em inorder
+/**
+ * Método de Ordenação feito exclusivamente para o problema do TP02 
+ * Utiliza a ideia de Counting Sort para ordenar os vértices de acordo com a cor
+ * de modo que os vértices de mesma cor fiquem juntos. E então utilizamos o Insertion Sort
+ * para ordenar os vértices de mesma cor.
+ * 
+ */
 void my_sort(Vector<Pair<int, int>> &arr, int maxColor){
     Vector<Vector<int>> sets(maxColor); // Cria um vetor de conjuntos de tamanho maxColor + 1
 

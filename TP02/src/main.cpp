@@ -20,8 +20,8 @@ using namespace std;
  */
 bool verify_greedy(Graph& g, Vector<Pair<int,int>> &colors){
 
-    for(size_t i = 0; i < g.vertices.getSize(); i ++){
-        auto& v_adj = g.vertices[i].adjacent;
+    for(size_t i = 0; i < g.getSize(); i ++){
+        auto& v_adj = g[i].adjacent;
 
         if(colors[i].first == 1) continue;
         
@@ -45,6 +45,7 @@ bool verify_greedy(Graph& g, Vector<Pair<int,int>> &colors){
  * 
  * @param method Metodo de ordenacao
  * @param colors Vetor de Cores
+ * @param maxColor Maior cor
  */
 void sort(char method, Vector<Pair<int,int>>& colors, int maxColor){
 
@@ -96,51 +97,36 @@ int main(){
     int n_adjac;
     for(int i = 0; i < n_vert; i ++){
         cin >> n_adjac;
-        
-        g.vertices[i].index = i;
-        g.vertices[i].adjacent = Vector<int>();
+        g[i].adjacent = Vector<int>();
         for(int j = 0; j < n_adjac; j ++){
             int temp; cin >> temp;
-            g.vertices[i].adjacent.push_back(temp);
+            g[i].adjacent.push_back(temp);
         }
     }
     
     int maxColor = -INF;
-
     Vector<Pair<int,int>> colors(n_vert); // color - id
     int cont = 0;
+
+    // Leitura das cores e calculo da maior cor
     for(int i = 0; i < n_vert; i ++) {
         cin >> colors[i].first;
         if(colors[i].first > maxColor) maxColor = colors[i].first;
         colors[i].second = cont ++;
     }
 
-
-    // Printing graph
-    /*for(int i = 0; i < n_vert; i ++){
-        cout << g.vertices[i].index << " - ";
-        for(size_t j = 0; j < g.vertices[i].adjacent.getSize(); j ++){
-            cout << g.vertices[i].adjacent[j] << " ";
-        }
-        cout << endl;
-    }*/
-
-    // print_array(colors);
-
-
-    // print_array(colors);
-
+    // Verifica se o grafo esta colorido gulosamente
     if(!verify_greedy(g, colors)){
         cout << "0" << endl; 
         return 0;
     }
 
+    // Ordena o vetor de cores
     sort(method, colors, maxColor);
     cout << "1 ";
     for(int i = 0; i < n_vert; i ++)
         cout << colors[i].second << " ";
     
     cout << endl;
-
     return 0;
 }

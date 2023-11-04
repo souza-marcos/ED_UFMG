@@ -1,31 +1,31 @@
 #include "vector.hpp"
 
+/**
+ * @brief Classe que representa um vertice do grafo (lista de adjacencia)
+ * 
+ */
 class Vertex{
 public:
-    int index;
     Vector<int> adjacent;
 
-    // Pode ocasionar um erro aqui
+    /**
+     * @brief Construtor padrao
+     * 
+     */
     Vertex()
     {
-        index = 0;
         adjacent = Vector<int>(1);
     }
 
-    Vertex(int index, int size){
-        this->index = index;
+    /**
+     * @brief Construtor que recebe o tamanho do vetor de adjacencia
+     * 
+     * @param size Tamanho do vetor de adjacencia - Quantidade de vertices adjacentes
+     */
+    Vertex(int size){
         adjacent = Vector<int>(size);
     }
     
 };
 
-class Graph{
-
-public:
-    Vector<Vertex> vertices;
-
-    Graph(int size){
-        vertices = Vector<Vertex>(size);
-    }
-
-};
+using Graph = Vector<Vertex>;
