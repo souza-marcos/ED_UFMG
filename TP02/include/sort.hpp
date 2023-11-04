@@ -188,28 +188,30 @@ void heap_sort(Vector<T> &arr){
 
 // Falta função propria de ordenamento
 // Para cada cor contruimos um set e vamos percorrendo em inorder
-void my_sort(Vector<Pair<int, int>> &arr, int maxColor){ // Recebe o array de cores
-    Vector<Set<Pair<int,int>>> sets(maxColor); // Cria um vetor de conjuntos de tamanho maxColor + 1
+void my_sort(Vector<Pair<int, int>> &arr, int maxColor){
+    Vector<Vector<int>> sets(maxColor); // Cria um vetor de conjuntos de tamanho maxColor + 1
 
     for(size_t i = 0; i < arr.getSize(); i ++){ // Percorre o array de cores
-        sets[arr[i].first - 1].insert(makePair(arr[i].second, arr[i].first)); // Insere no conjunto da cor
+        sets[arr[i].first - 1].push_back(arr[i].second); // Insere no conjunto da cor
     }
     
-    // Para cada cor, percorre o conjunto em inorder e vai inserindo no array de cores
-    int cont = 0; // Indice do array final
+    int cont = 0;
+    for(int i = 0; i < maxColor; i ++){ 
+        auto vec = sets[i]; // Pega o conjunto da cor i + 1
 
-    for(int i = 0; i < maxColor; i ++){ // Percorre o array de conjuntos
-        auto it = sets[i].begin(); // Aponta para o primeiro elemento -> menor elemento
-
-        while(it != sets[i].end()){ 
-            // Insere no array de cores
-            arr[cont].second = (*it).first; 
-            arr[cont].first = (*it).second; 
-            cont ++; // Incrementa o indice
-            ++ it; // Incrementa o iterador
-        }   
+        // Note que o algoritmo possui como subrotina o insertion sort 
+        int size = vec.getSize();
+        for(int i = 0; i < size; i++){
+            int element = vec[i];
+            int j = i;
+            while(j > 0 && element < vec[j - 1]){ 
+                vec[j] = vec[j - 1];    
+                j --;
+            }
+            vec[j] = element;
+            arr[cont++] = makePair(i + 1, element);
+        }
     }
-
 }
 
 #endif
