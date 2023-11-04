@@ -4,6 +4,7 @@
 #include <iostream>
 #include "vector.hpp"
 #include "pair.hpp"
+#include "set.hpp"
 
 template <typename T>
 void swap(T &a, T &b){
@@ -186,5 +187,29 @@ void heap_sort(Vector<T> &arr){
 }
 
 // Falta função propria de ordenamento
+// Para cada cor contruimos um set e vamos percorrendo em inorder
+void my_sort(Vector<Pair<int, int>> &arr, int maxColor){ // Recebe o array de cores
+    Vector<Set<Pair<int,int>>> sets(maxColor); // Cria um vetor de conjuntos de tamanho maxColor + 1
+
+    for(size_t i = 0; i < arr.getSize(); i ++){ // Percorre o array de cores
+        sets[arr[i].first - 1].insert(makePair(arr[i].second, arr[i].first)); // Insere no conjunto da cor
+    }
+    
+    // Para cada cor, percorre o conjunto em inorder e vai inserindo no array de cores
+    int cont = 0; // Indice do array final
+
+    for(int i = 0; i < maxColor; i ++){ // Percorre o array de conjuntos
+        auto it = sets[i].begin(); // Aponta para o primeiro elemento -> menor elemento
+
+        while(it != sets[i].end()){ 
+            // Insere no array de cores
+            arr[cont].second = (*it).first; 
+            arr[cont].first = (*it).second; 
+            cont ++; // Incrementa o indice
+            ++ it; // Incrementa o iterador
+        }   
+    }
+
+}
 
 #endif

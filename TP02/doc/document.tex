@@ -101,7 +101,7 @@ O código foi dividido nos arquivos já mencionados (\emph{set.hpp}, \emph{vecto
 
 \section{Análise de Complexidade}
 
-A seguir serão apresentadas as análises de complexidade das principais funções do programa.
+A seguir serão apresentadas as análises de complexidade das principais funções do programa utilizadas na solução.
 
 \subsection{infixToPosfix}
 Como mencionado acima, esta função converte uma expressão infixa para a representação posfixa. Para isso, a função percorre a string contendo a expressão infixa, e para cada caractere, verifica se ele é um operando ou um operador. Caso seja um operando, ele é adicionado à string de saída, caso seja um operador, ele é adicionado à pilha. Ao final da leitura da string, todos os operadores que estão na pilha são adicionados à string de saída. Portanto, a complexidade da função é $O(n)$, onde $n$ é o tamanho da string de entrada.

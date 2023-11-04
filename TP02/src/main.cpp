@@ -6,8 +6,9 @@
 #include "sort.hpp"
 
 #define endl '\n'
+#define INF 0x3f3f3f3f
+
 using namespace std;
-using std::cout;
 
 /**
  * @brief Verifica se o grafo esta colorido gulosamente
@@ -45,7 +46,7 @@ bool verify_greedy(Graph& g, Vector<Pair<int,int>> &colors){
  * @param method Metodo de ordenacao
  * @param colors Vetor de Cores
  */
-void sort(char method, Vector<Pair<int,int>>& colors){
+void sort(char method, Vector<Pair<int,int>>& colors, int maxColor){
 
     switch (method)
     {
@@ -71,6 +72,10 @@ void sort(char method, Vector<Pair<int,int>>& colors){
     
     case 'p':
         heap_sort(colors);
+        break;
+    
+    case 'y':
+        my_sort(colors, maxColor);
         break;
 
     default:
@@ -99,11 +104,14 @@ int main(){
             g.vertices[i].adjacent.push_back(temp);
         }
     }
+    
+    int maxColor = -INF;
 
     Vector<Pair<int,int>> colors(n_vert); // color - id
     int cont = 0;
     for(int i = 0; i < n_vert; i ++) {
         cin >> colors[i].first;
+        if(colors[i].first > maxColor) maxColor = colors[i].first;
         colors[i].second = cont ++;
     }
 
@@ -127,7 +135,7 @@ int main(){
         return 0;
     }
 
-    sort(method, colors);
+    sort(method, colors, maxColor);
     cout << "1 ";
     for(int i = 0; i < n_vert; i ++)
         cout << colors[i].second << " ";

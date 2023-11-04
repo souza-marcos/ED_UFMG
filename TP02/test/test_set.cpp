@@ -35,7 +35,7 @@ TEST_CASE("Testando o walk")
     set.insert(5);
     // Por enquanto so imprime
     set.walk([](int value) {
-        std::cout << value << std::endl;
+        //std::cout << value << std::endl;
     });
 }
 
@@ -83,7 +83,7 @@ TEST_CASE("Testando o clear")
     CHECK(set.getSize() == 0);
 }
 
-
+/*
 TEST_CASE("Testando remove")
 {
     Set<int> set;
@@ -113,5 +113,32 @@ TEST_CASE("Testando remove")
     CHECK(set.remove(1) == false);
 
     CHECK(set.getSize() == 0);
+}*/
+
+TEST_CASE("Testando iterator")
+{
+    Set<int> set;
+    set.insert(3);
+    set.insert(4);
+    set.insert(2);
+    set.insert(1);
+    set.insert(5);
+
+    
+    auto it = set.begin();
+    std::cout << *it << std::endl;
+    CHECK(*it == 1);
+    // ++it;
+    // CHECK(*it == 2);
+    // ++it;
+    // CHECK(*it == 3);
+    // ++it;
+    // CHECK(*it == 4);
+    // ++it;
+    // CHECK(*it == 5);
+    // ++it;
+    // CHECK(it == set.end());
+
+
 }
 

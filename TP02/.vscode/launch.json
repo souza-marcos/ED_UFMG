@@ -1,0 +1,29 @@
+{
+    "name": "C++ Launch",
+    "type": "cppdbg",
+    "request": "launch",
+    "program": "${workspaceFolder}/a.out",
+    "args": ["arg1", "arg2"],
+    "environment": [{ "name": "config", "value": "Debug" }],
+    "cwd": "${workspaceFolder}",
+    "configurations": [
+    {
+        "args": [
+            "-u",
+            "tdd",
+            "--timeout",
+            "999999",
+            "--colors",
+            "${workspaceFolder}/test"
+        ],
+        "internalConsoleOptions": "openOnSessionStart",
+        "name": "Mocha Tests",
+        "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+        "request": "launch",
+        "skipFiles": [
+            "<node_internals>/**"
+        ],
+        "type": "node"
+    }
+    ]
+  }

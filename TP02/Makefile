@@ -5,7 +5,7 @@ OBJ = obj
 INC = include
 BIN = bin
 OBJS = $(OBJ)/main.o 
-HDRS = $(INC)/vector.hpp $(INC)/set.hpp $(INC)/pair.hpp $(INC)/graph.hpp
+HDRS = $(INC)/vector.hpp $(INC)/set.hpp $(INC)/pair.hpp $(INC)/graph.hpp $(INC)/stack.hpp
 CFLAGS = -g -std=c++17 -Wall -c -I$(INC)
 
 EXE = $(BIN)/tp2.out
@@ -26,7 +26,7 @@ $(TEST): $(OBJ)/test.o
 $(OBJ)/main.o: $(HDRS) $(SRC)/main.cpp
 	$(CC) $(CFLAGS) -o $(OBJ)/main.o $(SRC)/main.cpp
 
-$(OBJ)/test.o: $(HDRS) test/test_sort.cpp
-	$(CC) $(CFLAGS) -o $(OBJ)/test.o test/test_sort.cpp
+$(OBJ)/test.o: $(HDRS) test/test_set.cpp
+	$(CC) $(CFLAGS) -o $(OBJ)/test.o test/test_set.cpp
 
 
