@@ -101,34 +101,26 @@ O código foi dividido nos arquivos já mencionados (\emph{set.hpp}, \emph{vecto
 
 \section{Análise de Complexidade}
 
-A seguir serão apresentadas as análises de complexidade das principais funções do programa utilizadas na solução.
+A seguir serão apresentadas as análises de complexidade das principais funções do programa utilizadas na solução. Como a complexidade das funções de ordenamento são bem conhecidas e foram implementadas de forma similar, não serão apresentadas aqui - com a exceção da função de ordenação própria.
 
-\subsection{infixToPosfix}
-Como mencionado acima, esta função converte uma expressão infixa para a representação posfixa. Para isso, a função percorre a string contendo a expressão infixa, e para cada caractere, verifica se ele é um operando ou um operador. Caso seja um operando, ele é adicionado à string de saída, caso seja um operador, ele é adicionado à pilha. Ao final da leitura da string, todos os operadores que estão na pilha são adicionados à string de saída. Portanto, a complexidade da função é $O(n)$, onde $n$ é o tamanho da string de entrada.
+\subsection{Complexidade da estrutura de dados \emph{set}}
 
-A complexidade de espaço é $O(n)$, pois a pilha pode conter no máximo $n$ elementos.
+A estrutura de dados \emph{set} foi implementada como uma árvore binária de busca não balanceada, e portanto, possui complexidade de tempo $ O(n)$ para inserção, remoção e busca, onde $n$ é o número de elementos do \emph{set} (Note que seu custo deve-se ao caso degenerado que pode ocorrer quando não balanceamos: A estrutura da árvore se assemelha a uma lista ligada). Além disso, a complexidade de espaço é $O(n)$, pois a árvore pode ter no máximo $n$ elementos.
 
-\subsection{evaluateExpression}
-Esta função recebe um vetor de inteiros representando a expressão booleana na forma posfixa e um vetor contendo os valores das variáveis da expressão e retorna o resultado da expressão. Para isso, a função percorre esse vetor de entrada, e para cada elemento, verifica se ele é um operando ou um operador (inteiros negativos). Caso seja um operando, ele é adicionado à pilha, caso seja um operador, ele é removido dois operandos do topo da pilha ou apenas um operando (No caso do operador $\sim$), e o resultado da operação é adicionado à pilha. Ao final da leitura da string, o resultado da expressão é o elemento que está no topo da pilha. Portanto, a complexidade da função é $O(n)$, onde $n$ é o número de elementos do vetor de entrada.
+\subsection{verifyGreedy}
 
-A complexidade de espaço é $O(n)$, pois assim como a função anterior, a pilha pode conter no máximo $n$ elementos.
+Em síntese, é a função mais importante do trabalho pois contitui da solução do problema apresentado, porém sua implementação é bem simples. A ideia implementada aqui é: Para cada vértice do grafo, é percorrido o vetor de adjacência e adicionado a cor do vértice adjacente em um \emph{set} (Caso sua cor seja menor que a cor do vértice atual), e ao final do vetor de adjacência conferimos se o tamanho do \emph{set} é igual à cor do vértice atual subtraído de um, caso não seja, a coloração não é gulosa (Há alguma cor menor que a atual que poderia ser usada).
 
-\subsection{satTree}
-Esta função recebe um vetor de inteiros representando uma expressão booleana na forma posfixa, um vetor contendo os valores das variáveis da expressão(agora podendo conter quantificadores existe e para todo) e retorna 1 ou 0 caso a expressão seja satisfazível ou não, respectivamente. Caso ela seja satisfazível, uma string contendo a possível solução é retornada. 
+Desse modo, no pior caso acontece quando temos um grafo com coloração realmente gulosa, e quando estamos analisando a coloração de um grafo completo, ou seja, para cada vértice do grafo, é necessário percorrer todos os seus vértices adjacentes ($n-1$ vértices), e para cada vértice adjacente, é necessário inserir sua cor no \emph{set}. Note que para o vértice de cor $ k $, vamos realizar $k-1$ inserções no \emph{set}, com o custo de cada inserção sendo $O(k)$. Assumindo todas essas considerações, podemos concluir a complexidade da função como $O(n^3)$, com $n$ sendo o número de vértices do grafo.
 
-Para isso, a função indexa os quantificadores da expressão, em seguida percorre o vetor dos quantificadores construindo a árvore de solução pelos últimos quantificadores até o primeiro.
-A árvore possui, portanto, como folhas os possíveis valores para os quantificadores (0 ou 1) e desse modo ela possui $2^k$ folhas, onde $k$ é o número de quantificadores, seja existe ou para todo. Para exemplificar considere a figura.
+\subsection{my\_sort}
+Função de ordenação própria, cujo funcionamento se baseia numa especifidade do problema: No final da leitura dos dados sabemos a maior cor usada. Com essa informação, consegui aproveitar da ideia de ordenamento sem comparação do \emph{counting sort}, separando os vértices de cores $ i $ para o vetor de índice $ i $. Ou seja, utilizo um vetor de vetores, cuja a posição $ i $ desse vetor guarda os vértices de cor $ i $.
 
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=\textwidth]{./images/sat_tree.png}
-%     \caption{Árvore de solução para a expressão $\exists a \exists d , b = c = 1,  (a \lor b \land c \land d)$}
-%     \label{fig:sat_tree}
-% \end{figure}
+Após isso, basta percorrer este vetor, ordenando cada subvetor com um método de ordenação, neste caso utilizei o \emph{insertion sort}, afinal tem-se a ideia de que estes subvetores possuem poucos elementos.
 
-Como visto, a árvore possui $2^k$ folhas, e para cada uma delas, a função \textit{evaluatePostfix} é chamada para verificar se a expressão é satisfazível. Portanto, a complexidade da função é $O(2^k)$, onde $k$ é o número de quantificadores.
 
-Já a complexidade de espaço é $O(k)$, pois a solução da árvore é realizada de modo ir o mais profundo na árvore possível, e cada vez que um nó é resolvido, seus filhos são removidos da memória.
+
+
 \section{Estratégias de robustez}
 
 A estratégia de robustez utilizada foi basicamente a verificação da entrada do usuário, ou seja a verificação na quantidade de argumentos e seus tipos.

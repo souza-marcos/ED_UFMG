@@ -19,7 +19,7 @@ template <typename T>
 class Vector
 {
 public:
-    int id = 100;
+    int id = 2;
 private:
 
 
