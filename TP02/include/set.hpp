@@ -184,12 +184,13 @@ private:
         }
         else // No com dois filhos
         {
-            Node<T> *min = findMin(aux->right);
+            Node<T> *min = findMin(aux->right); // Pegando sucessor - Menor dos maiores 
+            
             aux->value = min->value;
             if (min->parent->left == min) min->parent->left = nullptr;
             else min->parent->right = nullptr;
             delete min;
-        }
+        } // TODO here
         this->size--;
         return true;
     }
@@ -302,4 +303,3 @@ public:
 };
 
 #endif
-

@@ -3,6 +3,12 @@
 #define VECTOR_HPP
 
 #include <cstddef> // size_t
+#include <iostream>
+#include "memlog.h"
+
+using std::cout, std::endl;
+
+
 
 /**
  * @brief Classe que representa um vetor dinâmico
@@ -12,7 +18,11 @@
 template <typename T>
 class Vector
 {
+public:
+    int id = 100;
 private:
+
+
     T *arr;
     size_t size;
     size_t capacity;
@@ -22,6 +32,8 @@ private:
         for (size_t i = 0; i < size; i++)
         {
             temp[i] = arr[i];
+            ESCREVEMEMLOG((long int)&temp[i], sizeof(T), id);
+            LEMEMLOG((long int)&arr[i], sizeof(T), id);
         }
         delete[] arr;
         arr = temp;
@@ -29,6 +41,11 @@ private:
     }
 
 public:
+
+    void setId(int id){
+        this->id = id;
+    }
+
     /**
      * @brief Constrói um novo objeto Vector
      * 
@@ -53,6 +70,18 @@ public:
     }
 
     /**
+     * @brief Constrói um novo objeto Vector
+     * 
+     * @param size Tamanho inicial do vetor
+     */
+    Vector(int size, int id) : id(id), size(size), capacity(2 * size)
+    {
+        arr = new T[2 * size];
+
+        ESCREVEMEMLOG((long int)arr, capacity * sizeof(T), id);
+    }
+
+    /**
      * @brief Constrói um novo objeto Vector a partir de um Vector
      * 
      * @param v outro vetor
@@ -62,9 +91,12 @@ public:
         arr = new T[v.capacity];
         size = v.size;
         capacity = v.capacity;
+        id = v.id;
         for (size_t i = 0; i < size; i++)
         {
             arr[i] = v.arr[i];
+            ESCREVEMEMLOG((long int)&arr[i], sizeof(T), id);
+            LEMEMLOG((long int)&v.arr[i], sizeof(T), id);
         }
     }
 
@@ -90,6 +122,8 @@ public:
         }
         arr[size] = elem;
         size++;
+
+        ESCREVEMEMLOG((long int)&arr[size - 1], sizeof(T), id);
     }
 
     /**
@@ -128,13 +162,19 @@ public:
         return capacity;
     }
 
+    T& at(int index){
+        LEMEMLOG((long int)&arr[index], sizeof(T), id);
+        return arr[index];
+    }
+
     /**
-     * @brief Acessa uma posição do vetor
+     * @brief Acessa uma posição do vetor - Writing
      * 
      * @param index Índice do vetor a ser acessado
      * @return T& O elemento da posição index
      */
     T &operator[](int index){
+        ESCREVEMEMLOG((long int)&arr[index], sizeof(T), id); 
         return arr[index];
     }
 
@@ -154,6 +194,10 @@ public:
             for (size_t i = 0; i < size; i++)
             {
                 arr[i] = v.arr[i];
+
+                ESCREVEMEMLOG((long int)&arr[i], sizeof(T), id);
+                LEMEMLOG((long int)&v.arr[i], sizeof(T), v.id);
+
             }
         }
         return *this;

@@ -7,7 +7,7 @@
 #include "set.hpp"
 
 #ifndef ID_AUX_VECTOR
-#define ID_AUX_VECTOR 5
+#define ID_AUX_VECTOR 2
 #endif
 
 /**
@@ -35,7 +35,7 @@ void bubble_sort(Vector<T> &arr){
 
     for(int i = 0; i < size; i++){
         for(int j = 0; j + i < size - 1; j++){
-            if(arr[j] > arr[j + 1]) swap(arr[j], arr[j + 1]);
+            if(arr.at(j) > arr.at(j + 1)) swap(arr[j], arr[j + 1]);
         }
     }
 };
@@ -52,10 +52,10 @@ void insertion_sort(Vector<T> &arr){
     int size = arr.getSize();
 
     for(int i = 0; i < size; i++){
-        T element = arr[i];
+        T element = arr.at(i);
         int j = i;
-        while(j > 0 && element < arr[j - 1]){ 
-            arr[j] = arr[j - 1];    
+        while(j > 0 && element < arr.at(j - 1)){ 
+            arr[j] = arr.at(j - 1);    
             j --;
         }
         arr[j] = element;
@@ -77,7 +77,7 @@ void selection_sort(Vector<T> &arr){
     for(int i = 0; i < size; i++){
         int min = i;
         for(int j = i + 1; j < size; j++) 
-            if(arr[min] > arr[j]) min = j;    
+            if(arr.at(min) > arr.at(j)) min = j;    
         
         if(i != min) swap(arr[i], arr[min]);
     }
@@ -85,17 +85,17 @@ void selection_sort(Vector<T> &arr){
 
 // Quick Sort - Implementacao com pivo central
 void partition(Vector<Pair<int,int>> &arr, int left, int right, int& i, int& j){
-    Pair<int, int> pivot = arr[(left + right) / 2];
+    Pair<int, int> pivot = arr.at((left + right) / 2);
     i = left; j = right;
 
     do{
-        while(arr[i] < pivot) i ++;
-        while(arr[j] > pivot) j --;
+        while(arr.at(i) < pivot) i ++;
+        while(arr.at(j) > pivot) j --;
 
         if(i <= j) {
             // Swap them
-            Pair<int,int> aux = arr[i];
-            arr[i] = arr[j];
+            Pair<int,int> aux = arr.at(i);
+            arr[i] = arr.at(j);
             arr[j] = aux;
 
             i ++, j --;
@@ -126,32 +126,32 @@ void merge(Vector<T> &arr, int left, int middle, int right){
     int size_left = middle - left + 1;
     int size_right = right - middle;
 
-    Vector<T> left_arr(size_left);
-    Vector<T> right_arr(size_right);
+    Vector<T> left_arr(size_left, ID_AUX_VECTOR);
+    Vector<T> right_arr(size_right, ID_AUX_VECTOR);
 
-    for(int i = 0; i < size_left; i++) left_arr[i] = arr[left + i];
-    for(int i = 0; i < size_right; i++) right_arr[i] = arr[middle + 1 + i];
+    for(int i = 0; i < size_left; i++) left_arr[i] = arr.at(left + i);
+    for(int i = 0; i < size_right; i++) right_arr[i] = arr.at(middle + 1 + i);
 
     int i = 0, j = 0, k = left;
     while(i < size_left && j < size_right){
-        if(left_arr[i] <= right_arr[j]){
-            arr[k] = left_arr[i];
+        if(left_arr.at(i) <= right_arr.at(j)){
+            arr[k] = left_arr.at(i);
             i ++;
         } else {
-            arr[k] = right_arr[j];
+            arr[k] = right_arr.at(j);
             j ++;
         }
         k ++;
     }
 
     while(i < size_left){
-        arr[k] = left_arr[i];
+        arr[k] = left_arr.at(i);
         i ++;
         k ++;
     }
 
     while(j < size_right){
-        arr[k] = right_arr[j];
+        arr[k] = right_arr.at(j);
         j ++;
         k ++;
     }
@@ -183,8 +183,8 @@ void heapify(Vector<T> &arr, int size, int i){
     int left = 2 * i + 1;
     int right = 2 * i + 2;
 
-    if(left < size && arr[left] > arr[largest]) largest = left;
-    if(right < size && arr[right] > arr[largest]) largest = right;
+    if(left < size && arr.at(left) > arr.at(largest)) largest = left;
+    if(right < size && arr.at(right) > arr.at(largest)) largest = right;
 
     if(largest != i){
         swap(arr[i], arr[largest]);
@@ -219,31 +219,21 @@ void heap_sort(Vector<T> &arr){
  * 
  */
 void my_sort(Vector<Pair<int, int>> &arr, int maxColor){
-    Vector<Vector<int>> sets(maxColor); // Cria um vetor de conjuntos de tamanho maxColor + 1
+    Vector<Vector<int>> sets(maxColor, ID_AUX_VECTOR); // Cria um vetor de conjuntos de tamanho maxColor + 1
 
     for(size_t i = 0; i < arr.getSize(); i ++){ // Percorre o array de cores
-        sets[arr[i].first - 1].push_back(arr[i].second); // Insere no conjunto da cor
+        sets[arr.at(i).first - 1].push_back(arr.at(i).second); // Insere no conjunto da cor
     }
     
     int cont = 0;
     for(int i = 0; i < maxColor; i ++){ 
-        auto vec = sets[i]; // Pega o conjunto da cor i + 1
+        auto vec = sets.at(i); // Pega o conjunto da cor i + 1
 
         int size = vec.getSize();
        
         for(int j = 0; j < size; j ++){
-            arr[cont ++] = makePair(i + 1, vec[j]);
+            arr[cont ++] = makePair(i + 1, vec.at(j));
         }
-        // for(int j = 0; j < size; j++){
-        //     int element = vec[j];
-        //     int k = j;
-        //     while(k > 0 && element < vec[k - 1]){ 
-        //         vec[k] = vec[k - 1];    
-        //         k --;
-        //     }
-        //     vec[k] = element;
-        //     arr[cont++] = makePair(i + 1, element);
-        // }
     }
 }
 
