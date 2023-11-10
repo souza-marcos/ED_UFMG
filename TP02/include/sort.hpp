@@ -6,6 +6,10 @@
 #include "pair.hpp"
 #include "set.hpp"
 
+#ifndef ID_AUX_VECTOR
+#define ID_AUX_VECTOR 5
+#endif
+
 /**
  * @brief Função auxiliar para trocar dois elementos de lugar
  * 
@@ -210,8 +214,8 @@ void heap_sort(Vector<T> &arr){
 /**
  * Método de Ordenação feito exclusivamente para o problema do TP02 
  * Utiliza a ideia de Counting Sort para ordenar os vértices de acordo com a cor
- * de modo que os vértices de mesma cor fiquem juntos. E então utilizamos o Insertion Sort
- * para ordenar os vértices de mesma cor.
+ * de modo que os vértices de mesma cor fiquem juntos. Note que ao inserir no vec de indice i,
+ * esse subvetor já está ordenado.
  * 
  */
 void my_sort(Vector<Pair<int, int>> &arr, int maxColor){
@@ -225,18 +229,21 @@ void my_sort(Vector<Pair<int, int>> &arr, int maxColor){
     for(int i = 0; i < maxColor; i ++){ 
         auto vec = sets[i]; // Pega o conjunto da cor i + 1
 
-        // Note que o algoritmo possui como subrotina o insertion sort 
         int size = vec.getSize();
-        for(int i = 0; i < size; i++){
-            int element = vec[i];
-            int j = i;
-            while(j > 0 && element < vec[j - 1]){ 
-                vec[j] = vec[j - 1];    
-                j --;
-            }
-            vec[j] = element;
-            arr[cont++] = makePair(i + 1, element);
+       
+        for(int j = 0; j < size; j ++){
+            arr[cont ++] = makePair(i + 1, vec[j]);
         }
+        // for(int j = 0; j < size; j++){
+        //     int element = vec[j];
+        //     int k = j;
+        //     while(k > 0 && element < vec[k - 1]){ 
+        //         vec[k] = vec[k - 1];    
+        //         k --;
+        //     }
+        //     vec[k] = element;
+        //     arr[cont++] = makePair(i + 1, element);
+        // }
     }
 }
 
