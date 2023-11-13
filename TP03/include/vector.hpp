@@ -4,7 +4,7 @@
 
 #include <cstddef> // size_t
 #include <iostream>
-#include "memlog.h"
+// #include "memlog.h"
 
 using std::cout, std::endl;
 
@@ -32,8 +32,8 @@ private:
         for (size_t i = 0; i < size; i++)
         {
             temp[i] = arr[i];
-            ESCREVEMEMLOG((long int)&temp[i], sizeof(T), id);
-            LEMEMLOG((long int)&arr[i], sizeof(T), id);
+            // ESCREVEMEMLOG((long int)&temp[i], sizeof(T), id);
+            // LEMEMLOG((long int)&arr[i], sizeof(T), id);
         }
         delete[] arr;
         arr = temp;
@@ -78,7 +78,7 @@ public:
     {
         arr = new T[2 * size];
 
-        ESCREVEMEMLOG((long int)arr, capacity * sizeof(T), id);
+        // ESCREVEMEMLOG((long int)arr, capacity * sizeof(T), id);
     }
 
     /**
@@ -95,8 +95,8 @@ public:
         for (size_t i = 0; i < size; i++)
         {
             arr[i] = v.arr[i];
-            ESCREVEMEMLOG((long int)&arr[i], sizeof(T), id);
-            LEMEMLOG((long int)&v.arr[i], sizeof(T), id);
+            // ESCREVEMEMLOG((long int)&arr[i], sizeof(T), id);
+            // LEMEMLOG((long int)&v.arr[i], sizeof(T), id);
         }
     }
 
@@ -123,7 +123,7 @@ public:
         arr[size] = elem;
         size++;
 
-        ESCREVEMEMLOG((long int)&arr[size - 1], sizeof(T), id);
+        // ESCREVEMEMLOG((long int)&arr[size - 1], sizeof(T), id);
     }
 
     /**
@@ -163,7 +163,7 @@ public:
     }
 
     T& at(int index){
-        LEMEMLOG((long int)&arr[index], sizeof(T), id);
+        // LEMEMLOG((long int)&arr[index], sizeof(T), id);
         return arr[index];
     }
 
@@ -174,7 +174,7 @@ public:
      * @return T& O elemento da posição index
      */
     T &operator[](int index){
-        ESCREVEMEMLOG((long int)&arr[index], sizeof(T), id); 
+        // ESCREVEMEMLOG((long int)&arr[index], sizeof(T), id); 
         return arr[index];
     }
 
@@ -195,8 +195,8 @@ public:
             {
                 arr[i] = v.arr[i];
 
-                ESCREVEMEMLOG((long int)&arr[i], sizeof(T), id);
-                LEMEMLOG((long int)&v.arr[i], sizeof(T), v.id);
+                // ESCREVEMEMLOG((long int)&arr[i], sizeof(T), id);
+                // LEMEMLOG((long int)&v.arr[i], sizeof(T), v.id);
 
             }
         }
