@@ -1,5 +1,5 @@
-* Multiplicação de matrizes
-* Representação das matrizes
-* Completar a segtree a partir das matrizes identidades
-* Executar algoritmo padrão de segtree
+[X] Multiplicação de matrizes
+[X] Representação das matrizes
+[X] Completar a segtree a partir das matrizes identidades
+[X] Executar algoritmo padrão de segtree
 * Cortar a resposta para apenas 8 dígitos.

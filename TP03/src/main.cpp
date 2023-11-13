@@ -69,8 +69,13 @@ Matrix2 update(int i, Matrix2 x, int p, int l, int r){
 int main(){
 
     int n, q; cin >> n >> q;
+    
 
-    build(1, 0, n - 1);
+    // for(int i = 0; i < n; i ++){
+    //     Matrix2& aux = arr[i];
+    //     cout << aux.a11 << " " << aux.a12 << endl << aux.a21 <<  " " << aux.a22 << endl;
+    // }
+    // build(1, 0, n - 1);
 
     char type;
     while(q --){
@@ -86,7 +91,10 @@ int main(){
             cin >> tinicio >> tfinal >> x >> y;
 
             Matrix2 res = query(tinicio, tfinal, 1, 0, n - 1);
-            cout << res.a11 << " " << res.a12 << endl << res.a21 << " " << res.a22 << endl;
+            cout << (((x * res.a11) % MOD) + ((y * res.a12) % MOD) % MOD) << " " 
+                 << (((x * res.a21) % MOD) + ((y * res.a22) % MOD) % MOD) << endl; 
+
+            // cout << res.a11 << " " << res.a12 << endl << res.a21 << " " << res.a22 << endl;
         }
     }
     return 0;
