@@ -158,84 +158,102 @@ Ademais, foi utilizada a seguinte expressão para a parte de satisfatibilidade:
 %     \hfill
 %     \begin{subfigure}[c]{0.4\linewidth}
         
-%         \centering
-%         \includegraphics[width=\textwidth]{./images/sat_tree/registro_s-acesso-2.png}
-%         \caption{Pilha da função sat\_tree}
-%         \label{fig:ac02}
-%     \end{subfigure}
-%     \hfill
-%     \caption{Acesso de Memória}
-% \end{figure}
+\subsubsection{Verificação de Gulosidade}
 
-% \begin{figure}[H]
-%     \centering
-%     \hfill
-%     \begin{subfigure}[c]{0.4\textwidth}
-%         \centering
-%         \includegraphics[width=\textwidth]{./images/sat_tree/registro_s-distp-1.png}
-%         \caption{Pilha da função evaluateExpression}
-%         \label{fig:ac03}
-%     \end{subfigure}
-%     \hfill
-%     \begin{subfigure}[c]{0.4\textwidth}
-%         \centering
-%         \includegraphics[width=\textwidth]{./images/sat_tree/registro_s-distp-2.png}
-%         \caption{Pilha da função sat\_tree}
-%         \label{fig:ac04}
-%     \end{subfigure}
-%     \hfill
-%     \caption{Evolução de distância da pilha}
-% \end{figure}
+\begin{figure}[H]
+    \centering
+    \hfill
+    \begin{subfigure}[c]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{./images/100-200/common/registro_a-hist-1-0.png}
+        \caption{Lista de adjacência do grafo}
+        \label{fig:ac03}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{./images/100-200/common/registro_a-hist-1-1.png}
+        \caption{Vetor de cores}
+        \label{fig:ac04}
+    \end{subfigure}
+    \hfill
+    \caption{Frequência de distância de pilha na verificação de gulosidade}
 
-% Observa-se nessa Figura 3 (a) que ocorre um padrão em 4 partes, isso se deve porque a função \emph{evaluateExpression} é chamada uma vez para folha da árvore. 
-% Outro detalhe sobre a Figura 3 (b) é a possibilidade de observar que o caminhamento na árvore é realizada semelhante a DFS(\emph{Depht First Search}), consonante com a implementação da função \emph{sat\_tree}.
+\end{figure}
 
-% \begin{figure}[H]
-%     \centering
-%     \hfill
-%     \begin{subfigure}[c]{0.4\textwidth}
-%         \centering
-%         \includegraphics[width=\textwidth]{./images/sat_tree/registro_s-hist-1-1.png}
-%         \caption{Pilha da função evaluateExpression}
-%         \label{fig:ac05}
-%     \end{subfigure}
-%     \hfill
-%     \begin{subfigure}[c]{0.4\textwidth}
-%         \centering
-%         \includegraphics[width=\textwidth]{./images/sat_tree/registro_s-hist-1-2.png}
-%         \caption{Pilha da função sat\_tree}
-%         \label{fig:ac06}
-%     \end{subfigure}
-%     \hfill
-%     \caption{Distância da pilha}
-% \end{figure}
+Observe que o algoritmo de verificação de gulosidade é bem simples, e ainda possue uma boa localidade 
+de referência, uma vez que em geral estamos trabalho com espaços de memória contíguos, e esses acessos 
+são feitos de forma sequencial. Distâncias de pilha maiores significam que estamos no geral mudando o vetor 
+de adjacência que estamos percorrendo.
+\subsubsection{Ordenação}
 
-\subsection{Tempo de execução}
+Aqui, vamos detalhar principalmente sobre a localidade de referência do método de ordenação próprio, afinal
+os demais métodos foram implementados nas suas versões clássicas. Fica como sugestão a análise dos demais métodos. 
+\begin{figure}[H]
+    \centering
+    \hfill
+    \begin{subfigure}[c]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{./images/100-200/bubblesort/registro_a-distp-1.png}
+        \caption{Método por bolha}
+        \label{fig:ac05}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{./images/100-200/selectionsort/registro_a-distp-1.png}
+        \caption{Método por Seleção}
+        \label{fig:ac06}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{./images/100-200/inserctionsort/registro_a-distp-1.png}
+        \caption{Método por Inserção}
+        \label{fig:ac07}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{./images/100-200/heapsort/registro_a-distp-1.png}
+        \caption{Método do Heap}
+        \label{fig:ac08}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{./images/100-200/quickSort/registro_a-distp-1.png}
+        \caption{Método do QuickSort}   
+        \label{fig:ac09}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{./images/100-200/mergesort/registro_a-distp-1.png}
+        \caption{Método do MergeSort}
+        \label{fig:ac10}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{./images/100-200/my_sort/registro_a-distp-1.png}
+        \caption{Método próprio}
+        \label{fig:a11}
+    \end{subfigure}
+    \hfill
+    \caption{Frequência de distância de pilha nos métodos de ordenação}
 
-Nesse experimento foi realizado medições de tempo de execução a parte de satisfatibilidade do programa, variando o número de quantificadores da expressão. Para isso,
-variamos a quantidade de quantificadores da expressão de 13 até 20, para que possamos observar o comportamento do programa para um número maior de quantificadores.
-Teve como base o seguinte comando (Atente-se que estamos variando o número de quantificadores): 
+\end{figure}
 
+Observe que a figura \ref{fig:a11} (Ordenação própria) se assemelha bastante à figura \ref{fig:ac10} (MergeSort), isso se deve porque a ordenação própria possui a primeira etapa de separar os vértices, como já descrito anteriormente, e o mergesort com o processo de partições. 
+E na segunda etapa, ambos possuem a mesma ideia de percorrer os subvetores ordenados e atribuir os elementos para o vetor original, que no caso do \emph{mergesort} é repetido diversas vezes. Pode-se se certificar desse comportamento devido às "barras" de mesma distância de pilha presentes no final do gráfico. 
 
-\verb#bin/tp01 -s "0 | 1 | 2 | (...) | 17 | 18 | 19" eeeeeeeeeeeeeeeeeeee#
-
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.6\textwidth]{./images/time.png}
-%     \caption{Tempo de execução do programa para diferentes números de quantificadores}
-%     \label{fig:time}
-% \end{figure}
-
-
-Observa-se, portanto, comportamento semelhando a ordem de complexidade descrita anteriormente ($O(2^k)$), onde $k$ é o número de quantificadores.
 
 \section{Conclusões}
 
-O trabalho proposto foi de grande valia para o aprendizado de estruturas de dados, e de como elas podem ser utilizadas para solucionar problemas, afinal foi de extrema importância a utilização de pilhas e árvores como estruturas principais.  
+O trabalho proposto foi de grande valia para o aprendizado de estruturas de dados, e de como elas podem ser utilizadas para solucionar problemas, afinal foi de importância considerável a utilização de árvores (\emph{set}) e a representação como lista de adjacência de um grafo como estruturas principais, para se ter uma complexidade menor no algoritmo como todo. Ademais, temos também o uso dos métodos de ordenação, mas que nesse trabalho ficaram em segundo plano.
 
-Além disso, podemos observar que a análise de complexidade de grande importância, uma vez que ela nos permite prever o comportamento do programa para diferentes entradas, e assim, podemos realizar otimizações no código, como por exemplo, a utilização de uma estrutura de dados mais eficiente. Nesse trabalho, por exemplo, o problema de satisfatibilidade é um problema NP (determinístico não polinomial), ou seja, não existe uma solução conhecida em tempo polinomial, o que condiz com a solução implementada (de complexidade exponencial).
 
-Por fim, a análise do tempo de execução de forma experimental foi de fato interessante pois permitiu conferir a similaridade com a teoria e o mundo real.
 \section*{Bibliografia}
 
 Slides da disciplina de Estrutura de Dados, ministrada pelo Prof. Wagner Meira Jr. e Prof. Eder Fereira Figuiredo.
@@ -243,12 +261,16 @@ Slides da disciplina de Estrutura de Dados, ministrada pelo Prof. Wagner Meira J
 
 \section*{Instruções para compilação e execução}
 
+É estritamente necessário ter instalado na máquina o compilador g++, com pelo mínimo a versão descrita no começo do trabalho.  
+
 Em um terminal, navegue até a pasta raiz do projeto e execute os seguintes comandos:
 
 \begin{verbatim}
     $ make
-    $ ./bin/tp1.out -a "<expressão booleana>" <valores das variáveis> // Valor 
-    $ ./bin/tp1.out -s "<expressão booleana>" <valores das variáveis> // SAT
+    $ ./tp02.out
+
 \end{verbatim}
+
+Agora, basta seguir o padrão de entrada descrito na especificação do trabalho.
 
 \end{document}
