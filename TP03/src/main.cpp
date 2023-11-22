@@ -2,7 +2,11 @@
 #include "matrix2.hpp"
 #include "utils.hpp"
 
-// #include "memlog.h"
+#include "memlog.h"
+
+#ifndef ID_SEG
+    #define ID_SEG 0
+#endif
 
 #define endl '\n'
 #define INF 0x3f3f3f3f
@@ -23,7 +27,13 @@ Matrix2* seg;
  */
 Matrix2 query(int a, int b, int p, int l, int r){
     if(a > r or b < l) return Matrix2(); // Intervalos disjuntos
-    if(a <= l and b >= r) return seg[p]; // Intervalo [l, r] inteiramente contido em [a, b]
+    if(a <= l and b >= r) {
+        auto res = seg[p]; // Intervalo [l, r] inteiramente contido em [a, b]
+
+        LEMEMLOG((long int)&seg[p], sizeof(Matrix2), ID_SEG);
+
+        return res;
+    }
 
     int m = (l + r)/2;
     return query(a, b, 2 * p, l, m) * query(a, b, 2 * p + 1, m + 1, r);
@@ -40,20 +50,40 @@ Matrix2 query(int a, int b, int p, int l, int r){
  * @return Matrix2 Novo valor para a raiz da subarvore passada (quando p inicial eh 0 temos para a arvore inteira)
  */
 Matrix2 update(int i, Matrix2 x, int p, int l, int r){
-    if(i < l or i > r) return seg[p]; // Indice nao presente no intervalo
-    if(l == r) return seg[p] = x; // Chegou na folha == Array principal
+    if(i < l or i > r) {
+        auto res = seg[p]; // Indice nao presente no intervalo
 
+        LEMEMLOG((long int)&seg[p], sizeof(Matrix2), ID_SEG);
+        return res;
+    }
+    if(l == r) {
+        seg[p] = x; // Chegou na folha == Array principal
+
+        ESCREVEMEMLOG((long int)&seg[p], sizeof(Matrix2), ID_SEG);
+        return x;
+    }
     int m = (l + r)/2;
-    return seg[p] = update(i, x, 2 * p, l, m) * update(i, x, 2 * p + 1, m + 1, r);
+    seg[p] = update(i, x, 2 * p, l, m) * update(i, x, 2 * p + 1, m + 1, r);
+
+    ESCREVEMEMLOG((long int)&seg[p], sizeof(Matrix2), ID_SEG);
+    return seg[p]; // Poderia ter usado uma variavel auxiliar, para evitar o acesso
 }
 
 
 int main(){
 
     int n, q; cin >> n >> q;
+
+    char logname[100] = "registro.txt";
+    
+    iniciaMemLog(logname);
+    ativaMemLog();
+    defineFaseMemLog(0); // Inicializacao da segtree
     
     // Arvore de segmentos
     seg = new Matrix2[4 * n + 1];
+
+    defineFaseMemLog(1); // Operacoes na segtree
 
     char type;
     while(q --){

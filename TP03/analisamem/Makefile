@@ -30,10 +30,8 @@ use: $(EXE)
 	if test -d /tmp/out; then rm -rf /tmp/out; fi
 	mkdir /tmp/out
 	mkdir /tmp/out/teste
-	fixaddr/fixaddr.csh teste/registro_acesso_a.txt /tmp/out
-	$(EXE) -i /tmp/out/teste/registro_acesso_a.txt.fixed -p /tmp/out/registro_a
-# fixaddr/fixaddr.csh teste/registro_acesso_s.txt /tmp/out
-# $(EXE) -i /tmp/out/teste/registro_acesso_s.txt.fixed -p /tmp/out/registro_s
+	fixaddr/fixaddr.csh teste/registro.txt /tmp/out
+	$(EXE) -i /tmp/out/teste/registro.txt.fixed -p /tmp/out/registro
 	gnuplot /tmp/out/*.gp
 	ls /tmp/out/
 

@@ -4,8 +4,8 @@ SRC = src
 OBJ = obj
 INC = include
 BIN = bin
-OBJS = $(OBJ)/main.o
-HDRS = $(INC)/utils.hpp $(INC)/matrix2.hpp
+OBJS = $(OBJ)/main.o $(OBJ)/memlog.o
+HDRS = $(INC)/msgassert.h $(INC)/memlog.h $(INC)/utils.hpp $(INC)/matrix2.hpp
 CFLAGS = -g -std=c++17 -Wall -c -I$(INC)
 
 EXE = $(BIN)/tp3.out
@@ -18,5 +18,5 @@ $(EXE): $(OBJS)
 $(OBJ)/main.o: $(HDRS) $(SRC)/main.cpp
 	$(CC) $(CFLAGS) -o $(OBJ)/main.o $(SRC)/main.cpp
 
-# $(OBJ)/memlog.o: $(HDRS) $(SRC)/memlog.c
-# 	$(CC) $(CFLAGS) -o $(OBJ)/memlog.o $(SRC)/memlog.c 
+$(OBJ)/memlog.o: $(HDRS) $(SRC)/memlog.c
+	$(CC) $(CFLAGS) -o $(OBJ)/memlog.o $(SRC)/memlog.c 

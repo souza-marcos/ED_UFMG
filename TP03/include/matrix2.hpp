@@ -3,6 +3,11 @@
 
 #define ll long long
 #include "utils.hpp"
+#include "memlog.h"
+
+#ifndef ID_SEG
+    #define ID_SEG 0
+#endif
 
 /**
  * @brief Abstração de uma matriz 2x2
@@ -17,7 +22,12 @@ class Matrix2 {
          * @brief Construtor padrão, inicializa com uma matriz identidade
          * 
          */
-        Matrix2() : a11(1), a12(0), a21(0), a22(1) {};  
+        Matrix2() : a11(1), a12(0), a21(0), a22(1) {
+            ESCREVEMEMLOG((long int)a11, sizeof(ll), ID_SEG);
+            ESCREVEMEMLOG((long int)a12, sizeof(ll), ID_SEG);
+            ESCREVEMEMLOG((long int)a21, sizeof(ll), ID_SEG);
+            ESCREVEMEMLOG((long int)a22, sizeof(ll), ID_SEG);
+        };  
 
         /**
          * @brief Construtor com valores iniciais
