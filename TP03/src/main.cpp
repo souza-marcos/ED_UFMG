@@ -84,6 +84,8 @@ int main(){
             int pos; cin >> pos;
             Matrix2 up; cin >> up.a11 >> up.a12 >> up.a21 >> up.a22;
 
+            up.a11 %= MOD, up.a12 %= MOD, up.a21 %= MOD, up.a22 %= MOD;
+
             update(pos, up, 1, 0, n - 1);
         }
         else{
@@ -91,6 +93,8 @@ int main(){
             cin >> tinicio >> tfinal >> x >> y;
 
             Matrix2 res = query(tinicio, tfinal, 1, 0, n - 1);
+
+            x %= MOD, y %= MOD;
             cout << (((x * res.a11) % MOD) + ((y * res.a12) % MOD) % MOD) << " " 
                  << (((x * res.a21) % MOD) + ((y * res.a22) % MOD) % MOD) << endl; 
 
