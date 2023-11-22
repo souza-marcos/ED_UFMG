@@ -1,6 +1,6 @@
 #include <iostream>
 #include "matrix2.hpp"
-#include "vector.hpp"
+#include "utils.hpp"
 
 // #include "memlog.h"
 
@@ -9,10 +9,8 @@
 
 using namespace std;
 
-const int MAX = 1e5 + 10;
-
-Vector<Matrix2> arr(MAX);
-Vector<Matrix2> seg(4 * MAX);
+Matrix2* arr;
+Matrix2* seg;
 
 /**
  * @brief Construcao da arvore de segmentos utilizada no problema
@@ -69,12 +67,10 @@ Matrix2 update(int i, Matrix2 x, int p, int l, int r){
 int main(){
 
     int n, q; cin >> n >> q;
-    
 
-    // for(int i = 0; i < n; i ++){
-    //     Matrix2& aux = arr[i];
-    //     cout << aux.a11 << " " << aux.a12 << endl << aux.a21 <<  " " << aux.a22 << endl;
-    // }
+    arr = new Matrix2[n];
+    seg = new Matrix2[4 * n + 1];
+
     // build(1, 0, n - 1);
 
     char type;
@@ -94,12 +90,13 @@ int main(){
 
             Matrix2 res = query(tinicio, tfinal, 1, 0, n - 1);
 
-            x %= MOD, y %= MOD;
-            cout << (((x * res.a11) % MOD) + ((y * res.a12) % MOD) % MOD) << " " 
-                 << (((x * res.a21) % MOD) + ((y * res.a22) % MOD) % MOD) << endl; 
-
-            // cout << res.a11 << " " << res.a12 << endl << res.a21 << " " << res.a22 << endl;
+            cout << sum(mult(x, res.a11), mult(y, res.a12)) << " " 
+                 << sum(mult(x, res.a21), mult(y, res.a22)) << endl; 
         }
     }
+
+    delete[] arr;
+    delete[] seg;
+
     return 0;
 }

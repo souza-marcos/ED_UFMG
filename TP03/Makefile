@@ -5,7 +5,7 @@ OBJ = obj
 INC = include
 BIN = bin
 OBJS = $(OBJ)/main.o
-HDRS = $(INC)/vector.hpp $(INC)/matrix2.hpp
+HDRS = $(INC)/utils.hpp $(INC)/matrix2.hpp
 CFLAGS = -g -std=c++17 -Wall -c -I$(INC)
 
 EXE = $(BIN)/tp3.out
