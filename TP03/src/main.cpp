@@ -9,23 +9,7 @@
 
 using namespace std;
 
-Matrix2* arr;
 Matrix2* seg;
-
-/**
- * @brief Construcao da arvore de segmentos utilizada no problema
- * 
- * @param p Valor da posicao da segtree
- * @param l Inicio do intervalo que o elemento da posicao p da segtree representa
- * @param r Fim do intervalo que o elemento da posicao p da segtree representa
- * @return Matrix2 
- */
-Matrix2 build(int p, int l, int r){
-    if(l == r) seg[p] = arr[l]; // Folha
-
-    int m = (l + r)/2;
-    return seg[p] = build(2 * p, l, m) * build(2 * p + 1, m + 1, r); // Multiplicação de Matrizes eh uma operação associativa
-}
 
 /**
  * @brief Consulta à segtree para o intervalo pedido
@@ -67,11 +51,9 @@ Matrix2 update(int i, Matrix2 x, int p, int l, int r){
 int main(){
 
     int n, q; cin >> n >> q;
-
-    arr = new Matrix2[n];
+    
+    // Arvore de segmentos
     seg = new Matrix2[4 * n + 1];
-
-    // build(1, 0, n - 1);
 
     char type;
     while(q --){
@@ -84,7 +66,7 @@ int main(){
 
             update(pos, up, 1, 0, n - 1);
         }
-        else{
+        else{ // Consulta
             int tinicio, tfinal, x, y;
             cin >> tinicio >> tfinal >> x >> y;
 
@@ -95,7 +77,6 @@ int main(){
         }
     }
 
-    delete[] arr;
     delete[] seg;
 
     return 0;
