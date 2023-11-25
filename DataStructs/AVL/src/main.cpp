@@ -14,5 +14,11 @@ int main(){
      
     avl.printInOrder();
 
+    avl.remove(100);
+    avl.remove(2);
+    avl.remove(3);
+
+    avl.printInOrder();
+
     return 0;
 }

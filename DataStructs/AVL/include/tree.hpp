@@ -18,8 +18,8 @@ class Tree{
     Node* root;
 
     void destruct(Node* node);
-
     void printInOrder(Node* node);
+    void remove(Node* subtree, int value);
 
 public:
     Tree();
@@ -35,7 +35,10 @@ public:
 
     Node* rightRotate(Node* curHead);
 
+    Node* searchNode(Node* node, int value);
+
     void insert(int value);
+    void remove(int value);
 
     void printInOrder();
 };
