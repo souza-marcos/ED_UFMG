@@ -117,7 +117,8 @@ Analisando o programa como um todo, temos que :
 \end{enumerate}
 
 
-Portanto, a complexidade do programa é $O(n + q \cdot \log n)$, onde $n$ é o número de transformações lineares informada na entrada e $q$ é o número de consultas informada na entrada.
+Portanto, a complexidade de tempo do programa é $O(n + q \cdot \log n)$, onde $n$ é o número de transformações lineares informada na entrada e $q$ é o número de consultas informada na entrada.
+Já a complexidade de espaço é $O(n)$, pois é necessário armazenar a árvore de segmentos, que neste caso tem o tamanho de $4n + 1$.
 
 \section{Estratégias de robustez}
 Com a utilização da biblioteca \emph{msgassert}, presente no arquivo \emph{msgassert.h}, foi implementada a verificação do domínio dos dados de entrada, especificados na descrição do trabalho. 
