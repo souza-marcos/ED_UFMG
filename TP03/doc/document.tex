@@ -12,6 +12,7 @@
 
 \usepackage{float}
 \usepackage{subcaption}
+\usepackage{hyperref}
 
 \title{TP02 - Estrutura de dados}
 \author{Marcos Daniel Souza Netto - 2022069492} 
@@ -25,7 +26,7 @@
 O problema proposto consiste em implementar um programa que realiza $q$ operações de dois tipos sobre um vetor de Matrizes 2x2: O primeiro tipo consiste em uma atualização de uma posição do vetor, e o segundo tipo consiste em uma consulta sobre um intervalo do vetor (Deve ser retornado a multiplicações de todas as matrizes do intervalo) e depois aplicar essa transformação linear a um vetor dado pelo usuário.
 
 Note que uma solução ingênua para o problema seria: Dado a operação de atualização $i$ e a matriz $M$, basta atualizar a posição $i$ do vetor com a matriz $M$ (Custo constante). E para cada operação de consulta, basta percorrer o intervalo do vetor, multiplicando as matrizes e retornando o resultado e então multiplicá-lo pelo vetor. 
-Porém, essa solução não é eficiente, pois uma operação de consulta desse tipo possui complexidade $O(n)$, e tendo em vista que vão ser realizadas um número grande de consultas, a complexidade passaria para $O(n \cdot c)$, onde $c$ é o número de consultas.
+Porém, essa solução não é eficiente, pois uma operação de consulta desse tipo possui complexidade $O(n)$, e tendo em vista que vão ser realizadas um número grande de consultas, a complexidade passaria para $O(n \cdot q)$, onde $q$ é o número de consultas.
 
 A solução implementada e também proposta pelos professores consiste em utilizar a ideia de \emph{Segment Tree}, que é uma estrutura de dados que permite realizar consultas em intervalos do vetor de forma eficiente. 
 
@@ -45,7 +46,7 @@ apresentar as especificações do ambiente de desenvolvimento utilizado:
 
 \subsection{Estruturas de dados}
 
-Neste trabalho, foi utilizado apenas a estrutura de dados de \emph{Segment Tree}, que foi implementada no próprio arquivo principal.
+Neste trabalho, foi utilizado apenas a estrutura de dados de \emph{Segment Tree}, que foi implementada no arquivo \emph{segtree.hpp}.
 
 Como já mencionado anteriormente, essa estrutura de dados otimiza a consulta de intervalos de um vetor, e portanto, foi utilizada para otimizar a consulta de intervalos do vetor de matrizes.
 
@@ -53,8 +54,9 @@ A ideia é que cada nó da árvore representa um intervalo do vetor, e cada nó 
 verificar se o intervalo que ele representa está contido no intervalo da consulta, caso esteja, basta retornar o valor guardado no nó, caso contrário, é necessário percorrer os filhos do nó, e repetir o processo.
 Com esses pedaços, podemos combiná-los (aqui, multiplicá-los) para encontrar o resultado. Note que nessa estrutura de dados é importante que a operação a ser realizada deve ter a propriedade de associatividade (A ordem em que as operações são realizadas não altera o resultado), e no caso da multiplicação de matrizes, essa propriedade é satisfeita.
 
+Para não entrar nos detalhes dessa estrutura de dados, a implementação utilizada foi baseada na aula 9 da Maratona UFMG, disponível em: \url{https://youtu.be/OW_nQN-UQhA?si=4qCz2jhB6BHWVRMz}. 
 
-\subsubsection*{Propriedades da \emph{Segment Tree}}
+\subsubsection*{Propriedades da \emph{Segment Tree}} \label{sec:prop_segtree}
 \begin{itemize}
     \item A altura da árvore é $O(\log n)$, onde $n$ é o número de elementos do vetor;
     \item O número total de nós da árvore é $2n -1$, onde $n$ é o número de elementos do vetor;
@@ -72,30 +74,54 @@ Com esses pedaços, podemos combiná-los (aqui, multiplicá-los) para encontrar 
 
 
 \subsection{Classes e principais funções}
-O código foi dividido nos arquivos \emph{matrix2.hpp} e o arquivo principal \emph{main.cpp}.
+O código foi dividido nos arquivos \emph{matrix2.hpp}, \emph{segtree.hpp} e o arquivo principal \emph{main.cpp}.
 \begin{itemize}
     \item \textbf{matrix2.hpp}: Encapsulamento do tipo abstrato de dados de matriz 2x2, com as operações de multiplicação e atribuição;
         \subitem \textbf{Matrix2()}: O construtor padrão desse TAD inicializa a matriz com a matriz identidade;
         \subitem \textbf{Matrix2(int, int, int, int)}: O construtor desse TAD recebe os valores dos elementos da matriz;
         \subitem \textbf{operator*}: Sobrecarga do operador de multiplicação, que recebe uma matriz e retorna a multiplicação das duas matrizes; 
 
-    \item \textbf{main.cpp}: Arquivo principal do programa que além de receber os dados de entrada, realiza as operações de atualização e consulta no vetor de matrizes sobre a estrutura de dados \emph{Segment Tree} e imprime o resultado na saída padrão;
-        \subitem \textbf{query}: Função que recebe a raiz da árvore de segmentos, o intervalo da consulta e o vetor de matrizes, e retorna a multiplicação das matrizes do intervalo;
-        \subitem \textbf{update}: Função que recebe a raiz da árvore de segmentos, a posição do vetor a ser atualizada e a nova matriz, e atualiza a posição do vetor com a nova matriz, recalculando os valores dos nós da árvore que foram afetados pela atualização;
-        \subitem \textbf{main}: Função principal do programa, que recebe os dados de entrada, realiza as operações de atualização e consulta e imprime o resultado na saída padrão; 
+    \item \textbf{segtree.hpp}: Implementação da estrutura de dados árvore de segmentos;
+        \subitem \textbf{query}: Função que recebe o intervalo da consulta e retorna a multiplicação das matrizes do intervalo;
+        \subitem \textbf{update}: Função que recebe a posição do vetor a ser atualizada e a nova matriz, e atualiza a posição do vetor com a nova matriz, recalculando os valores dos nós da árvore que foram afetados pela atualização;
+
+    \item \textbf{main.cpp}: Arquivo principal do programa que recebe os dados de entrada, os valida, e faz chamada para as funções de atualização e consulta da árvore de segmentos;
+        \subitem \textbf{main}: Função principal do programa, que recebe os dados de entrada, os valida, faz chamada para as funções de atualização e consulta da árvore de segmentos e mostra o resultado das consultas na saída padrão;
     
 \end{itemize}
 
 \section{Análise de Complexidade}
 
 A seguir serão apresentadas as análises de complexidade das principais funções do programa utilizadas na solução.
-Observe que a complexidade já foi apresentada anteriormente.
+Como a parte mais importante é a implementação da árvore de segmentos, a análise de complexidade será feita para as funções de construção, consulta e atualização da árvore de segmentos.
+
+\subsection{Construtor}
+A forma implementada para a construção da árvore de segmentos foi a inicialização de todas as posições do vetor que a representa com a matriz identidade. 
+Dessa forma, como o tamanho do vetor é $4n + 1$, onde $n$ é o número de transformações lineares informada na entrada, temos que a complexidade da construção da árvore é $O(n)$.
 
 \subsection{Função \emph{query}}
 
+Como mencionada na seção \ref{sec:prop_segtree}, a complexidade da consulta na árvore de segmentos é $O(\log n)$, onde $n$ é o número de elementos do vetor. Isso acontece porque são necessário acessar no máximo 4 nós por nível da árvore para a construção da consulta, e a altura da árvore é $O(\log n)$.
+
+\subsection{Função \emph{update}}
+
+De forma semelhante à função \emph{query}, para atualizar a árvore com os intervalos já pré-computados, temos que atualizar uma folha da árvore de segmentos e em seguida subir na estrutura recalculando os valores dos nós pais. 
+Poranto, temos a complexidade de atualização como $O(\log n)$.
+
+\subsection{Complexidade geral}
+
+Analisando o programa como um todo, temos que :
+\begin{enumerate}
+    \item A complexidade da construção da árvore de segmentos é $O(n)$ que é realizada uma única vez;
+    \item A complexidade de uma operação, tanto de consulta quanto de atualização, é $O(\log n)$, e é realizada $q$ vezes;
+\end{enumerate}
+
+
+Portanto, a complexidade do programa é $O(n + q \cdot \log n)$, onde $n$ é o número de transformações lineares informada na entrada e $q$ é o número de consultas informada na entrada.
 
 \section{Estratégias de robustez}
-Não foi utilizada nenhuma estratégia de robustez neste trabalho.
+Com a utilização da biblioteca \emph{msgassert}, presente no arquivo \emph{msgassert.h}, foi implementada a verificação do domínio dos dados de entrada, especificados na descrição do trabalho. 
+Quando o dado de entrada não respeita o domínio especificado, o programa é encerrado e uma mensagem do erro específico é exibida na saída padrão de erro.
 
 \section{Análise Experimental}
 
@@ -232,7 +258,10 @@ O trabalho proposto foi de grande valia para o aprendizado de estruturas de dado
 
 Slides da disciplina de Estrutura de Dados, ministrada pelo Prof. Wagner Meira Jr. e Prof. Eder Fereira Figuiredo.
 
-Aula 9 - SegTree, Maratona UFMG. Disponível em: \url{https://www.youtube.com}
+
+Aula 9 - SegTree, Maratona UFMG. 
+
+Disponível em: \url{https://youtu.be/OW_nQN-UQhA?si=4qCz2jhB6BHWVRMz}
 
 \section*{Instruções para compilação e execução}
 
@@ -247,5 +276,6 @@ Em um terminal, navegue até a pasta raiz do projeto e execute os seguintes coma
 \end{verbatim}
 
 Agora, basta seguir o padrão de entrada descrito na especificação do trabalho.
+
 
 \end{document}
