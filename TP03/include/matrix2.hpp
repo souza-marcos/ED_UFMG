@@ -23,10 +23,7 @@ class Matrix2 {
          * 
          */
         Matrix2() : a11(1), a12(0), a21(0), a22(1) {
-            ESCREVEMEMLOG((long int)a11, sizeof(ll), ID_SEG);
-            ESCREVEMEMLOG((long int)a12, sizeof(ll), ID_SEG);
-            ESCREVEMEMLOG((long int)a21, sizeof(ll), ID_SEG);
-            ESCREVEMEMLOG((long int)a22, sizeof(ll), ID_SEG);
+            ESCREVEMEMLOG((long int)this, sizeof(Matrix2), ID_SEG);
         };  
 
         /**
@@ -37,7 +34,9 @@ class Matrix2 {
          * @param c Valor do elemento coluna 2 linha 1
          * @param d Valor do elemento coluna 2 linha 2
          */
-        Matrix2(ll a, ll b, ll c, ll d) : a11(a), a12(b), a21(c), a22(d) {};
+        Matrix2(ll a, ll b, ll c, ll d) : a11(a), a12(b), a21(c), a22(d) {
+            ESCREVEMEMLOG((long int)this, sizeof(Matrix2), ID_SEG);
+        };
 
 
         /**
@@ -54,6 +53,9 @@ class Matrix2 {
             res.a21 = sum(mult(a21, other.a11), mult(a22, other.a21));
             res.a22 = sum(mult(a21, other.a12), mult(a22, other.a22));
 
+            LEMEMLOG((long int)&other, sizeof(Matrix2), ID_SEG);
+            LEMEMLOG((long int)this, sizeof(Matrix2), ID_SEG);
+            ESCREVEMEMLOG((long int)&res, sizeof(Matrix2), ID_SEG);
             return res;
         }
 };
