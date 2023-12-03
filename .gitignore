@@ -6,7 +6,6 @@
 # Ignore files
 *.aux
 *.log
-*.pdf
 *.gz
 *.zip
 *.o
