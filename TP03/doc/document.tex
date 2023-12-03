@@ -13,6 +13,7 @@
 \usepackage{float}
 \usepackage{subcaption}
 \usepackage{hyperref}
+% \usepackage[backend=biber, style=numeric]{biblatex}
 
 \title{TP02 - Estrutura de dados}
 \author{Marcos Daniel Souza Netto - 2022069492} 
@@ -131,138 +132,57 @@ A seguir serão apresentados os resultados obtidos na experimentação do progra
 \subsection{Localidade de Referência}
 
 Utilizando o programa \emph{analisamem}, fornecido pelos professores, foi possível observar a localidade de referência do programa. 
-Para isso, foi utilizado o programa de geração de casos de testes, também fornecido pelos professores, para gerar um grafo com 100 vértices e 200 arestas com coloração gulosa.
+Para isso, foi utilizado o programa de geração de casos de testes, também fornecido pelos professores, para gerar uma entrada que realiza 1000 operações (consulta e atualização) em um vetor de 1000 posições.
 
-\subsubsection{Grafo }
-Nesta fase, assim como a seguinte, são idênticas para os sete testes que foram realizados, e portanto, serão apresentadas apenas uma vez. Isso se deve porque cada teste foi realizado com um método de ordenação diferente, e portanto, a única diferença entre eles é a função de ordenação utilizada.
+Além disso, é importante salientar que toda a análise de localidade será feita sobre a estrutura principal do trabalho, a árvore de segmentos.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{./images/registro-acesso-0.png}
+    \caption{Leitura e escrita na memória}
+    \label{fig:ac01}
+\end{figure}
+
+Essa figura é bastante interessante e informativa, pois mostra por meios práticos o funcionamento de uma árvore de segmentos: 
+Note que a base do "retângulo" da figura é mais preenchida do que sua parte superior, isso se deve porque os nós mais próximos da raiz, na implementação utilizada, estão em endereços mais baixos enquanto as folhas estão em endereços mais altos. 
+\begin{itemize}
+    \item Em consultas, o intuito de se utilizar árvore de segmentos é exatamente utilizar de cálculos já precomputados e assim acessar menos os valores orginais do próprio vetor. Desse modo, utiliza-se dos valores que estão em endereços mais baixos no gráfico. Eventualmente, caso necessário, a estrutura deve descer para posições próximas das folhas, mas como mostrado no gráfico, ocorre com menos frequência.
+    \item Em atualizações, o comportamento é semelhante ao anterior, com a diferença que obrigatoriamente é necessário descer para as folhas e assim recalculando os nós que estão no caminho da folha atualizada até a raiz. É fácil ver que também temos acessos mais frequentes para nós próximos da raiz afinal esse é o comportamento da própria operação de atualização.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{./images/registro-hist-1-0.png}
+    \caption{Distâcia de Pilha}
+    \label{fig:ac02}
+\end{figure}
+
+A figura acima reafirma o argumento anterior: Alguns nós são acessados muito mais vezes do que outros. Isto é, nós mais proximos da raiz, devido o próprio comportamento da árvore de segmentos, são acessados com maior frequência.
 
 
-    % % \begin{figure}[H]
-    % %     \centering
-    % %     \hfill
-    % %     \begin{subfigure}[c]{0.4\textwidth}
-    % %         \centering
-    %         \includegraphics[width=\textwidth]{./images/100-200/common/registro_a-acesso-0.png}
-    %         \caption{Acesso de memória do grafo}
-    %         \label{fig:ac01}
-    %     \end{subfigure}%
-    %     \hfill
-    %     \begin{subfigure}[c]{0.4\linewidth}
-    %         \centering
-    %         \includegraphics[width=\textwidth]{./images/100-200/common/registro_a-distp-0.png}
-    %         \caption{Distância da pilha na leitura dos dados}
-    %         \label{fig:ac02}
-    %     \end{subfigure}
-    %     \hfill
-    %     \caption{Leitura dos dados}
-    % \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{./images/registro-distp-0.png}
+    \caption{Evolução de Distância de Pilha}
+    \label{fig:ac03}
+\end{figure}
 
-    % Nada de muito interessante aqui, tanto que me ambas as figuras podemos observar que na metade a esquerda do gráfico a leitura dos vértices e seus adjacentes e na segunda metade a leitura do grafo para verificar a gulosidade.
-            
-    % \subsubsection{Verificação de Gulosidade}
-
-    % \begin{figure}[H]
-    %     \centering
-    %     \hfill
-    %     \begin{subfigure}[c]{0.4\textwidth}
-    %         \centering
-    %         \includegraphics[width=\textwidth]{./images/100-200/common/registro_a-hist-1-0.png}
-    %         \caption{Lista de adjacência do grafo}
-    %         \label{fig:ac03}
-    %     \end{subfigure}
-    %     \hfill
-    %     \begin{subfigure}[c]{0.4\textwidth}
-    %         \centering
-    %         \includegraphics[width=\textwidth]{./images/100-200/common/registro_a-hist-1-1.png}
-    %         \caption{Vetor de cores}
-    %         \label{fig:ac04}
-    %     \end{subfigure}
-    %     \hfill
-    %     \caption{Frequência de distância de pilha na verificação de gulosidade}
-
-    % \end{figure}
-
-    % Observe que o algoritmo de verificação de gulosidade é bem simples, e ainda possue uma boa localidade 
-    % de referência, uma vez que em geral estamos trabalho com espaços de memória contíguos, e esses acessos 
-    % são feitos de forma sequencial. Distâncias de pilha maiores significam que estamos no geral mudando o vetor 
-    % de adjacência que estamos percorrendo.
-    % \subsubsection{Ordenação}
-
-    % Aqui, vamos detalhar principalmente sobre a localidade de referência do método de ordenação próprio, afinal
-    % os demais métodos foram implementados nas suas versões clássicas. Fica como sugestão a análise dos demais métodos. 
-    % \begin{figure}[H]
-    %     \centering
-    %     \hfill
-    %     \begin{subfigure}[c]{0.4\textwidth}
-    %         \centering
-    %         \includegraphics[width=\textwidth]{./images/100-200/bubblesort/registro_a-distp-1.png}
-    %         \caption{Método por bolha}
-    %         \label{fig:ac05}
-    %     \end{subfigure}
-    %     \hfill
-    %     \begin{subfigure}[c]{0.4\textwidth}
-    %         \centering
-    %         \includegraphics[width=\textwidth]{./images/100-200/selectionsort/registro_a-distp-1.png}
-    %         \caption{Método por Seleção}
-    %         \label{fig:ac06}
-    %     \end{subfigure}
-    %     \hfill
-    %     \begin{subfigure}[c]{0.4\textwidth}
-    %         \centering
-    %         \includegraphics[width=\textwidth]{./images/100-200/inserctionsort/registro_a-distp-1.png}
-    %         \caption{Método por Inserção}
-    %         \label{fig:ac07}
-    %     \end{subfigure}
-    %     \hfill
-    %     \begin{subfigure}[c]{0.4\textwidth}
-    %         \centering
-    %         \includegraphics[width=\textwidth]{./images/100-200/heapsort/registro_a-distp-1.png}
-    %         \caption{Método do Heap}
-    %         \label{fig:ac08}
-    %     \end{subfigure}
-    %     \hfill
-    %     \begin{subfigure}[c]{0.4\textwidth}
-    %         \centering
-    %         \includegraphics[width=\textwidth]{./images/100-200/quickSort/registro_a-distp-1.png}
-    %         \caption{Método do QuickSort}   
-    %         \label{fig:ac09}
-    %     \end{subfigure}
-    %     \hfill
-    %     \begin{subfigure}[c]{0.4\textwidth}
-    %         \centering
-    %         \includegraphics[width=\textwidth]{./images/100-200/mergesort/registro_a-distp-1.png}
-    %         \caption{Método do MergeSort}
-    %         \label{fig:ac10}
-    %     \end{subfigure}
-    %     \hfill
-    %     \begin{subfigure}[c]{0.4\textwidth}
-    %         \centering
-    %         \includegraphics[width=\textwidth]{./images/100-200/my_sort/registro_a-distp-1.png}
-    %         \caption{Método próprio}
-    %         \label{fig:a11}
-    %     \end{subfigure}
-    %     \hfill
-    %     \caption{Frequência de distância de pilha nos métodos de ordenação}
-
-    % \end{figure}
-
-Observe que a figura \ref{fig:a11} (Ordenação própria) se assemelha bastante à figura \ref{fig:ac10} (MergeSort), isso se deve porque a ordenação própria possui a primeira etapa de separar os vértices, como já descrito anteriormente, e o mergesort com o processo de partições. 
-E na segunda etapa, ambos possuem a mesma ideia de percorrer os subvetores ordenados e atribuir os elementos para o vetor original, que no caso do \emph{mergesort} é repetido diversas vezes. Pode-se se certificar desse comportamento devido às "barras" de mesma distância de pilha presentes no final do gráfico. 
+% A figura \ref*{fig:ac03} mostra a evolução da pilha ao passar da execução do programa.
 
 
 \section{Conclusões}
 
-O trabalho proposto foi de grande valia para o aprendizado de estruturas de dados, e de como elas podem ser utilizadas para solucionar problemas, afinal foi de importância considerável a utilização de árvores (\emph{set}) e a representação como lista de adjacência de um grafo como estruturas principais, para se ter uma complexidade menor no algoritmo como todo. Ademais, temos também o uso dos métodos de ordenação, mas que nesse trabalho ficaram em segundo plano.
-
+O trabalho proposto foi de grande valia para o aprendizado de estruturas de dados, e de como elas podem ser utilizadas para resolver de forma muito mais eficientes certos problemas. Neste caso, a estrutura de árvore de segmentos provê de forma eficiente operações de atualização e consulta sobre um vetor cuja operações sobre o dado tem propriedade associativa.
 
 \section*{Bibliografia}
 
-Slides da disciplina de Estrutura de Dados, ministrada pelo Prof. Wagner Meira Jr. e Prof. Eder Fereira Figuiredo.
+\begin{itemize}
+    \item Slides da disciplina de Estrutura de Dados, ministrada pelo Prof. Wagner Meira Jr. e Prof. Eder Fereira Figuiredo.
+    \item Aula 9 - SegTree, Maratona UFMG. 
+    \subitem Disponível em: \url{https://youtu.be/OW_nQN-UQhA?si=4qCz2jhB6BHWVRMz}
+    
+\end{itemize}
 
-
-Aula 9 - SegTree, Maratona UFMG. 
-
-Disponível em: \url{https://youtu.be/OW_nQN-UQhA?si=4qCz2jhB6BHWVRMz}
 
 \section*{Instruções para compilação e execução}
 
