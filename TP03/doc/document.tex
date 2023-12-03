@@ -24,7 +24,7 @@
 
 \section{Introdução}
 
-O problema proposto consiste em implementar um programa que realiza $q$ operações de dois tipos sobre um vetor de Matrizes 2x2: O primeiro tipo consiste em uma atualização de uma posição do vetor, e o segundo tipo consiste em uma consulta sobre um intervalo do vetor (Deve ser retornado a multiplicações de todas as matrizes do intervalo) e depois aplicar essa transformação linear a um vetor dado pelo usuário.
+O problema proposto consiste em implementar um programa que realiza $q$ operações de dois tipos sobre um vetor de Matrizes 2x2: O primeiro tipo consiste em uma atualização de uma posição do vetor, e o segundo tipo consiste em uma consulta sobre um intervalo do vetor (Deve ser retornado a multiplicações de todas as matrizes do intervalo e depois aplicar essa transformação linear a um vetor dado pelo usuário).
 
 Note que uma solução ingênua para o problema seria: Dado a operação de atualização $i$ e a matriz $M$, basta atualizar a posição $i$ do vetor com a matriz $M$ (Custo constante). E para cada operação de consulta, basta percorrer o intervalo do vetor, multiplicando as matrizes e retornando o resultado e então multiplicá-lo pelo vetor. 
 Porém, essa solução não é eficiente, pois uma operação de consulta desse tipo possui complexidade $O(n)$, e tendo em vista que vão ser realizadas um número grande de consultas, a complexidade passaria para $O(n \cdot q)$, onde $q$ é o número de consultas.
