@@ -25,4 +25,4 @@ Cada diretório praticaXX corresponde a uma prática específica, contendo subdi
 
 # Utilize
 
-Fique à vontade para explorar, contribuir ou utilizar este repositório como recurso educacional. Boa jornada em seus estudos de estruturas de dados e algoritmos!
+Fique à vontade para explorar, contribuir ou utilizar este repositório como recurso educacional. 
